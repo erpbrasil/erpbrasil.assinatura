@@ -18,7 +18,7 @@ def test_main():
 
 def test_chave_cert():
     d = Certificado(caminho, senha)
-    chave, certificado = d.separa_chave_certificado(senha)
+    chave, certificado = d.separa_chave_certificado()
     assert chave, certificado
 
 

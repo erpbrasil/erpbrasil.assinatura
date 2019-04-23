@@ -18,13 +18,11 @@ class Certificado(object):
     def abre_arquivo(self):
         return open(self.caminho_arquivo, 'rb').read()
 
-    def separa_chave_certificado(self, senha):
+    def separa_chave_certificado(self):
         """ Realiza a separação da chave e do certificado
-
-        :param senha:
         :return:
         """
-        p12 = crypto.load_pkcs12(self.abre_arquivo(), senha)
+        p12 = crypto.load_pkcs12(self.abre_arquivo(), self.senha)
         certificado = crypto.dump_certificate(crypto.FILETYPE_PEM,
                                               p12.get_certificate())
         chave = crypto.dump_privatekey(crypto.FILETYPE_PEM,
@@ -33,7 +31,6 @@ class Certificado(object):
 
     def _load_key_and_certificates(self):
         """
-        :param senha:
         :return:
         """
         return load_key_and_certificates(
@@ -41,4 +38,3 @@ class Certificado(object):
             password=self.senha,
             backend=default_backend()
         )
-
