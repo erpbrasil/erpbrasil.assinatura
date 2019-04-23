@@ -19,5 +19,12 @@ class Assinatura(object):
             algomd=altoritimo
         )
 
+    @staticmethod
+    def verifica_pdf(arquivo, certificados_de_confianca):
+        return pdf.verify(
+            data=arquivo,
+            trusted_cert_pems=certificados_de_confianca
+        )
+
     def assina_xml(self):
         pass
