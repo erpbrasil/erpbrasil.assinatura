@@ -14,6 +14,7 @@ certificado_nfe_senha = os.environ['certificado_nfe_senha']
 certificado_ecpf_caminho = os.environ['certificado_ecpf_caminho']
 certificado_ecpf_senha = os.environ['certificado_ecpf_senha']
 
+
 def test_main():
     assert main([]) == 0
 
