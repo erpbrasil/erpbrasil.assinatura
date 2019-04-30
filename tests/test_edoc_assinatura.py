@@ -26,7 +26,7 @@ def test_assinatura_pdf():
     certificado = Certificado(caminho, senha)
     assinador = Assinatura(certificado)
 
-    nome_arquivo = 'tests/google.pdf'
+    nome_arquivo = 'tests/files/google.pdf'
     arquivo = open(nome_arquivo, 'rb').read()
 
     dados_assinatura = {
@@ -42,8 +42,8 @@ def test_assinatura_pdf():
         arquivo=arquivo,
         dados_assinatura=dados_assinatura,
     )
-
-    nome_arquivo = nome_arquivo.replace('.pdf', '-signed-cms.pdf')
+    nome_arquivo = nome_arquivo.replace(
+        'files', 'result').replace('.pdf', '-signed-cms.pdf')
     with open(nome_arquivo, 'wb') as fp:
         fp.write(arquivo)
         fp.write(assinatura)

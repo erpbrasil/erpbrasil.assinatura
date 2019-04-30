@@ -45,6 +45,9 @@ htmlcov
 *.iml
 *.komodoproject
 
+#Test result
+tests/result/*
+
 # Complexity
 output/*.html
 output/*/index.html
