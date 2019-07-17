@@ -16,7 +16,7 @@ def test_assinatura_xml_nfe400():
     certificado = Certificado(certificado_nfe_caminho, certificado_nfe_senha)
     assinador = Assinatura(certificado)
 
-    nome_arquivo = 'tests/files/nfe-400.xml'
+    nome_arquivo = './files/nfe-400.xml'
     arquivo = open(nome_arquivo, 'rb').read()
 
     assinatura = assinador.assina_xml(
@@ -28,3 +28,4 @@ def test_assinatura_xml_nfe400():
         fp.write(arquivo)
         fp.write(assinatura)
 
+test_assinatura_xml_nfe400()

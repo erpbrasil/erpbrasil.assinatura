@@ -24,7 +24,7 @@ def read(*names, **kwargs):
 
 
 setup(
-    name='edoc-assinatura',
+    name='erpbrasil.assinatura',
     version='0.0.0',
     license='MIT license',
     description='Assinatura de documentos com certificados digitais A1 e A3',
@@ -34,7 +34,7 @@ setup(
     ),
     author='Luis Felipe Mileo',
     author_email='mileo@kmee.com.br',
-    url='https://github.com/python-edoc/edoc-assinatura',
+    url='https://github.com/erpbrasil/erpbrasil.assinatura',
     packages=find_packages('src'),
     package_dir={'': 'src'},
     py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
