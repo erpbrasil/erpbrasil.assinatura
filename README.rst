@@ -15,8 +15,9 @@ Overview
     * - package
       - | |version| |wheel| |supported-versions| |supported-implementations|
         | |commits-since|
-.. |docs| image:: https://readthedocs.org/projects/edoc-assinatura/badge/?style=flat
-    :target: https://readthedocs.org/projects/edoc-assinatura
+
+.. |docs| image:: https://readthedocs.org/projects/erpbrasilassinatura/badge/?version=latest
+    :target: https://erpbrasilassinatura.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
 .. |travis| image:: https://travis-ci.org/python-edoc/edoc-assinatura.svg?branch=master
