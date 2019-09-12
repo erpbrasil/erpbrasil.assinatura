@@ -1,4 +1,5 @@
 pyopenssl==18.0.0
+pytz
 signxml
 cryptography
 endesive
