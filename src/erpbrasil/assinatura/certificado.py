@@ -1,8 +1,15 @@
 # coding=utf-8
 
+import tempfile
+from datetime import datetime
+
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.serialization.pkcs12 import load_key_and_certificates
 from OpenSSL import crypto
+from pytz import UTC
+
+
+from .excecoes import CertificadoExpirado
 
 
 class Certificado(object):
@@ -65,7 +72,7 @@ class Certificado(object):
     def proprietario(self):
         """Pega o nome do proprietário do certificado"""
         if ':' in self._cn:
-            proprietario = self._cn.rsplit(':',1)[0]
+            proprietario = self._cn.rsplit(':', 1)[0]
         else:
             proprietario = self._cn
         return proprietario
@@ -74,7 +81,7 @@ class Certificado(object):
         # As vezes tem o nome e CNPJ do proprietário
         cnpj = ''
         if ':' in self._cn:
-            cnpj = self._cn.rsplit(':',1)[1]
+            cnpj = self._cn.rsplit(':', 1)[1]
         return cnpj
 
     def cert_chave(self):
