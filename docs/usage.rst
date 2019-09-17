@@ -2,6 +2,6 @@
 Usage
 =====
 
-To use edoc-assinatura in a project::
+To use erpbrasil.assinatura in a project::
 
-	import edoc_assinatura
+	import erpbrasil.assinatura

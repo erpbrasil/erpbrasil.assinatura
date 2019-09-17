@@ -4,9 +4,9 @@ import os
 from datetime import datetime
 from tzlocal import get_localzone
 
-from edoc_assinatura.cli import main
-from edoc_assinatura.certificado import Certificado
-from edoc_assinatura.assinatura import Assinatura
+from erpbrasil.assinatura.cli import main
+from erpbrasil.assinatura.certificado import Certificado
+from erpbrasil.assinatura.assinatura import Assinatura
 
 certificado_nfe_caminho = os.environ['certificado_nfe_caminho']
 certificado_nfe_senha = os.environ['certificado_nfe_senha']
@@ -38,7 +38,7 @@ def test_assinatura_nfe_pdf():
         b'location': b'BR',
         b'signingdate': str.encode(
             datetime.now(get_localzone()).strftime("%Y%M%d%H%M%S%Z")),
-        b'reason': b'Teste edoc assinatura',
+        b'reason': b'Teste assinatura',
     }
 
     assinatura = assinador.assina_pdf(

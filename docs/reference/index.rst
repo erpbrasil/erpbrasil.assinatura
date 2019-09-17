@@ -4,4 +4,4 @@ Reference
 .. toctree::
     :glob:
 
-    edoc_assinatura*
+    erpbrasil.assinatura*

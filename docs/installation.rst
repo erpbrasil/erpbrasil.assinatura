@@ -4,4 +4,4 @@ Installation
 
 At the command line::
 
-    pip install edoc-assinatura
+    pip install erpbrasil.assinatura

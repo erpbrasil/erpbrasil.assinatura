@@ -64,9 +64,9 @@ setup(
         'Topic :: Utilities',
     ],
     project_urls={
-        'Documentation': 'https://edoc-assinatura.readthedocs.io/',
-        'Changelog': 'https://edoc-assinatura.readthedocs.io/en/latest/changelog.html',
-        'Issue Tracker': 'https://github.com/python-edoc/edoc-assinatura/issues',
+        'Documentation': 'https://erpbrasilassinatura.readthedocs.io/',
+        'Changelog': 'https://erpbrasilassinatura.readthedocs.io/en/latest/changelog.html',
+        'Issue Tracker': 'https://github.com/erpbrasil/erpbrasil.assinatura/issues',
     },
     keywords=[
         # eg: 'keyword1', 'keyword2', 'keyword3',
@@ -86,7 +86,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'edoc-assinatura = edoc_assinatura.cli:main',
+            'erpbrasil-assinatura = erpbrasil.assinatura.cli:main',
         ]
     },
 )

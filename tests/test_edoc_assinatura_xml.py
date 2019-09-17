@@ -1,8 +1,8 @@
 # coding=utf-8
 
 import os
-from edoc_assinatura.certificado import Certificado
-from edoc_assinatura.assinatura import Assinatura
+from erpbrasil.assinatura.certificado import Certificado
+from erpbrasil.assinatura.assinatura import Assinatura
 
 
 certificado_nfe_caminho = os.environ['certificado_nfe_caminho']

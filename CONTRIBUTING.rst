@@ -8,7 +8,7 @@ little bit helps, and credit will always be given.
 Bug reports
 ===========
 
-When `reporting a bug <https://github.com/python-edoc/edoc-assinatura/issues>`_ please include:
+When `reporting a bug <https://github.com/erpbrasil/erpbrasil.assinatura/issues>`_ please include:
 
     * Your operating system name and version.
     * Any details about your local setup that might be helpful in troubleshooting.
@@ -17,14 +17,14 @@ When `reporting a bug <https://github.com/python-edoc/edoc-assinatura/issues>`_ 
 Documentation improvements
 ==========================
 
-edoc-assinatura could always use more documentation, whether as part of the
-official edoc-assinatura docs, in docstrings, or even on the web in blog posts,
+erpbrasil.assinatura could always use more documentation, whether as part of the
+official erpbrasil.assinatura docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
 Feature requests and feedback
 =============================
 
-The best way to send feedback is to file an issue at https://github.com/python-edoc/edoc-assinatura/issues.
+The best way to send feedback is to file an issue at https://github.com/erpbrasil/erpbrasil.assinatura/issues.
 
 If you are proposing a feature:
 
@@ -35,13 +35,13 @@ If you are proposing a feature:
 Development
 ===========
 
-To set up `edoc-assinatura` for local development:
+To set up `erpbrasil.assinatura` for local development:
 
-1. Fork `edoc-assinatura <https://github.com/python-edoc/edoc-assinatura>`_
+1. Fork `erpbrasil.assinatura <https://github.com/erpbrasil/erpbrasil.assinatura>`_
    (look for the "Fork" button).
 2. Clone your fork locally::
 
-    git clone git@github.com:your_name_here/edoc-assinatura.git
+    git clone git@github.com:your_name_here/erpbrasil.assinatura.git
 
 3. Create a branch for local development::
 
@@ -74,7 +74,7 @@ For merging, you should:
 4. Add yourself to ``AUTHORS.rst``.
 
 .. [1] If you don't have all the necessary python versions available locally you can rely on Travis - it will
-       `run the tests <https://travis-ci.org/python-edoc/edoc-assinatura/pull_requests>`_ for each change you add in the pull request.
+       `run the tests <https://travis-ci.org/erpbrasil/erpbrasil.assinatura/pull_requests>`_ for each change you add in the pull request.
 
        It will be slower though ...
 
