@@ -1,11 +1,7 @@
 # coding=utf-8
 
 import os
-from datetime import datetime
 
-from tzlocal import get_localzone
-
-from erpbrasil.assinatura.assinatura import Assinatura
 from erpbrasil.assinatura.certificado import Certificado
 from erpbrasil.assinatura.cli import main
 

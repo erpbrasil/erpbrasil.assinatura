@@ -17,7 +17,6 @@ certificado_ecpf_caminho = os.environ.get('certificado_ecpf_caminho',
 certificado_ecpf_senha = os.environ.get('certificado_ecpf_senha', 'teste')
 
 
-
 def test_assinatura_nfe_pdf():
     certificado = Certificado(certificado_nfe_caminho, certificado_nfe_senha)
     assinador = Assinatura(certificado)
