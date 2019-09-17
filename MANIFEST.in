@@ -13,6 +13,7 @@ include CHANGELOG.rst
 include CONTRIBUTING.rst
 include LICENSE
 include README.rst
+include *.txt
 
 include tox.ini .travis.yml appveyor.yml
 
