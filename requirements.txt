@@ -1,7 +1,7 @@
+pyopenssl==19.0.0
 signxml
 cryptography
 endesive
 tzlocal
-pyopenssl
 chardet
 

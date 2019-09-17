@@ -11,8 +11,17 @@ from os.path import dirname
 from os.path import join
 from os.path import splitext
 
+try:  # for pip >= 10
+    from pip._internal.req import parse_requirements
+except ImportError:  # for pip <= 9.0.3
+    from pip.req import parse_requirements
+
 from setuptools import find_packages
 from setuptools import setup
+
+install_reqs = parse_requirements('requirements.txt', session=False)
+
+reqs = [str(ir.req) for ir in install_reqs]
 
 
 def read(*names, **kwargs):
@@ -29,7 +38,9 @@ setup(
     license='MIT license',
     description='Assinatura de documentos com certificados digitais A1 e A3',
     long_description='%s\n%s' % (
-        re.compile('^.. start-badges.*^.. end-badges', re.M | re.S).sub('', read('README.rst')),
+        re.compile('^.. start-badges.*^.. end-badges', re.M | re.S).sub('',
+                                                                        read(
+                                                                            'README.rst')),
         re.sub(':[a-z]+:`~?(.*?)`', r'``\1``', read('CHANGELOG.rst'))
     ),
     author='Luis Felipe Mileo',
@@ -72,14 +83,7 @@ setup(
         # eg: 'keyword1', 'keyword2', 'keyword3',
     ],
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
-    install_requires=[
-        'signxml',
-        'cryptography',
-        'endesive',
-        'tzlocal',
-        'pyopenssl',
-        'chardet',
-    ],
+    install_requires=reqs,
     extras_require={
         # eg:
         #   'rst': ['docutils>=0.11'],
