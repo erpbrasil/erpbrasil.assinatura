@@ -31,7 +31,7 @@ version = release = '0.0.8'
 pygments_style = 'trac'
 templates_path = ['.']
 extlinks = {
-    'issue': ('https://github.com/erpbrasil/erpbrasil.assinatura//issues/%s', '#'),
+    'issue': ('https://github.com/erpbrasil/erpbrasil.assinatura/issues/%s', '#'),
     'pr': ('https://github.com/erpbrasil/erpbrasil.assinatura/pull/%s', 'PR #'),
 }
 # on_rtd is whether we are on readthedocs.org
