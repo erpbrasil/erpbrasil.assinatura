@@ -1,4 +1,4 @@
-pyopenssl==19.0.0
+pyopenssl==18.0.0
 signxml
 cryptography
 endesive
