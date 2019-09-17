@@ -25,7 +25,7 @@ def read(*names, **kwargs):
 
 setup(
     name='erpbrasil.assinatura',
-    version='version='0.0.0'',
+    version='version='0.0.1'',
     license='MIT license',
     description='Assinatura de documentos com certificados digitais A1 e A3',
     long_description='%s\n%s' % (
