@@ -24,9 +24,7 @@ def test_assinatura_xml_nfe400():
     assinatura = assinador.assina_xml(
         arquivo=arquivo,
     )
-    nome_arquivo = nome_arquivo.replace(
-        'files', 'result').replace('.xml', '-signed.xml')
-    with open(nome_arquivo, 'wb') as fp:
+    with open('/tmp/nfe-400-signed.xml', 'wb') as fp:
         fp.write(arquivo)
         fp.write(assinatura)
 

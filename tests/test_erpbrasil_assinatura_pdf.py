@@ -37,9 +37,8 @@ def test_assinatura_nfe_pdf():
         arquivo=arquivo,
         dados_assinatura=dados_assinatura,
     )
-    nome_arquivo = nome_arquivo.replace(
-        'files', 'result').replace('.pdf', '-signed-nfe.pdf')
-    with open(nome_arquivo, 'wb') as fp:
+
+    with open('/tmp/google-signed-nfe.pdf', 'wb') as fp:
         fp.write(arquivo)
         fp.write(assinatura)
 
@@ -65,8 +64,7 @@ def test_assinatura_multipla_pdf():
         dados_assinatura=dados_assinatura,
     )
 
-    nome_arquivo = nome_arquivo.replace(
-        'files', 'result').replace('.pdf', '-signed-multiple-1.pdf')
+    nome_arquivo = '/tmp/google-signed-multiple-1.pdf'
     with open(nome_arquivo, 'wb') as fp:
         fp.write(arquivo)
         fp.write(assinatura1)
@@ -89,11 +87,6 @@ def test_assinatura_multipla_pdf():
         arquivo=arquivo2,
         dados_assinatura=dados_assinatura,
     )
-
-    nome_arquivo = nome_arquivo.replace(
-        'signed-multiple-1.pdf',
-        'signed-multiple-2.pdf'
-    )
-    with open(nome_arquivo, 'wb') as fp:
+    with open('/tmp/google-signed-multiple-1.pdf', 'wb') as fp:
         fp.write(arquivo2)
         fp.write(assinatura2)
