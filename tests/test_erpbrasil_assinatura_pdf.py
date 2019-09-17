@@ -8,11 +8,14 @@ from tzlocal import get_localzone
 from erpbrasil.assinatura.assinatura import Assinatura
 from erpbrasil.assinatura.certificado import Certificado
 
-certificado_nfe_caminho = os.environ['certificado_nfe_caminho']
-certificado_nfe_senha = os.environ['certificado_nfe_senha']
+certificado_nfe_caminho = os.environ.get('certificado_nfe_caminho',
+                                         'tests/teste.pfx')
+certificado_nfe_senha = os.environ.get('certificado_nfe_senha', 'teste')
 
-certificado_ecpf_caminho = os.environ['certificado_ecpf_caminho']
-certificado_ecpf_senha = os.environ['certificado_ecpf_senha']
+certificado_ecpf_caminho = os.environ.get('certificado_ecpf_caminho',
+                                          'tests/teste.pfx')
+certificado_ecpf_senha = os.environ.get('certificado_ecpf_senha', 'teste')
+
 
 
 def test_assinatura_nfe_pdf():
