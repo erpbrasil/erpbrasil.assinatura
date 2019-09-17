@@ -20,7 +20,7 @@ Overview
     :target: https://erpbrasilassinatura.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
-.. |travis| image:: https://travis-ci.org/erpbrasil/erpbrasil.assinatura.svg?branch=master
+.. |travis| image:: https://api.travis-ci.org/erpbrasil/erpbrasil.assinatura.svg?branch=master
     :alt: Travis-CI Build Status
     :target: https://travis-ci.org/erpbrasil/erpbrasil.assinatura
 
@@ -32,7 +32,7 @@ Overview
     :alt: Requirements Status
     :target: https://requires.io/github/erpbrasil/erpbrasil.assinatura/requirements/?branch=master
 
-.. |codecov| image:: https://codecov.io/github/erpbrasil/erpbrasil.assinatura/coverage.svg?branch=master
+.. |codecov| image:: https://codecov.io/gh/erpbrasil/erpbrasil.assinatura/branch/master/graphs/badge.svg?branch=master
     :alt: Coverage Status
     :target: https://codecov.io/github/erpbrasil/erpbrasil.assinatura
 
@@ -42,7 +42,7 @@ Overview
 
 .. |commits-since| image:: https://img.shields.io/github/commits-since/erpbrasil/erpbrasil.assinatura/v0.0.8..svg
     :alt: Commits since latest release
-    :target: https://github.com/erpbrasil/erpbrasil.assinatura/compare/v0.0.8....master
+    :target: https://github.com/erpbrasil/erpbrasil.assinatura/compare/v0.0.8...master
 
 .. |wheel| image:: https://img.shields.io/pypi/wheel/erpbrasil.assinatura.svg
     :alt: PyPI Wheel
@@ -74,7 +74,7 @@ Documentation
 =============
 
 
-https://erpbrasil.assinatura.readthedocs.io/
+https://erpbrasilassinatura.readthedocs.io/
 
 
 Development
