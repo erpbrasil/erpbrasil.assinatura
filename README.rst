@@ -40,9 +40,9 @@ Overview
     :alt: PyPI Package latest release
     :target: https://erpbrasilassinatura.readthedocs.io/en/latest/
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/erpbrasil/erpbrasil.assinatura/v0.0.8..svg
+.. |commits-since| image:: https://img.shields.io/github/commits-since/erpbrasil/erpbrasil.assinatura/v0.1.0..svg
     :alt: Commits since latest release
-    :target: https://github.com/erpbrasil/erpbrasil.assinatura/compare/v0.0.8...master
+    :target: https://github.com/erpbrasil/erpbrasil.assinatura/compare/v0.1.0...master
 
 .. |wheel| image:: https://img.shields.io/pypi/wheel/erpbrasil.assinatura.svg
     :alt: PyPI Wheel
