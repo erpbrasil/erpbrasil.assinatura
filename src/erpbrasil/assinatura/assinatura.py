@@ -1,9 +1,11 @@
 # coding=utf-8
 
 import signxml
-from endesive import pdf, signer, xades
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
+from endesive import pdf
+from endesive import signer
+from endesive import xades
 from lxml import etree
 
 

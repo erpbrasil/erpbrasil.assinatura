@@ -2,16 +2,28 @@
 
 import os
 from datetime import datetime
+
 from tzlocal import get_localzone
 
-from erpbrasil.assinatura.certificado import Certificado
 from erpbrasil.assinatura.assinatura import Assinatura
+from erpbrasil.assinatura.certificado import Certificado
+from erpbrasil.assinatura.cli import main
 
 certificado_nfe_caminho = os.environ['certificado_nfe_caminho']
 certificado_nfe_senha = os.environ['certificado_nfe_senha']
 
 certificado_ecpf_caminho = os.environ['certificado_ecpf_caminho']
 certificado_ecpf_senha = os.environ['certificado_ecpf_senha']
+
+
+def test_main():
+    assert main([]) == 0
+
+
+def test_chave_cert():
+    d = Certificado(certificado_nfe_caminho, certificado_nfe_senha)
+    chave, certificado = d.separa_chave_certificado()
+    assert chave, certificado
 
 
 def test_assinatura_nfe_pdf():

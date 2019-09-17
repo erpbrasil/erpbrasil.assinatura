@@ -1,9 +1,9 @@
 # coding=utf-8
 
 import os
-from erpbrasil.assinatura.certificado import Certificado
-from erpbrasil.assinatura.assinatura import Assinatura
 
+from erpbrasil.assinatura.assinatura import Assinatura
+from erpbrasil.assinatura.certificado import Certificado
 
 certificado_nfe_caminho = os.environ['certificado_nfe_caminho']
 certificado_nfe_senha = os.environ['certificado_nfe_senha']
@@ -27,5 +27,6 @@ def test_assinatura_xml_nfe400():
     with open(nome_arquivo, 'wb') as fp:
         fp.write(arquivo)
         fp.write(assinatura)
+
 
 test_assinatura_xml_nfe400()
