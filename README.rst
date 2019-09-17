@@ -20,41 +20,41 @@ Overview
     :target: https://erpbrasilassinatura.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
-.. |travis| image:: https://travis-ci.org/python-edoc/edoc-assinatura.svg?branch=master
+.. |travis| image:: https://api.travis-ci.org/erpbrasil/erpbrasil.assinatura.svg?branch=master
     :alt: Travis-CI Build Status
-    :target: https://travis-ci.org/python-edoc/edoc-assinatura
+    :target: https://travis-ci.org/erpbrasil/erpbrasil.assinatura
 
-.. |appveyor| image:: https://ci.appveyor.com/api/projects/status/github/python-edoc/edoc-assinatura?branch=master&svg=true
+.. |appveyor| image:: https://ci.appveyor.com/api/projects/status/github/erpbrasil/erpbrasil.assinatura?branch=master&svg=true
     :alt: AppVeyor Build Status
-    :target: https://ci.appveyor.com/project/python-edoc/edoc-assinatura
+    :target: https://ci.appveyor.com/project/erpbrasil/erpbrasil.assinatura
 
-.. |requires| image:: https://requires.io/github/python-edoc/edoc-assinatura/requirements.svg?branch=master
-    :alt: Requirements Status
-    :target: https://requires.io/github/python-edoc/edoc-assinatura/requirements/?branch=master
+.. image:: https://requires.io/github/erpbrasil/erpbrasil.assinatura/requirements.svg?branch=master
+     :target: https://requires.io/github/erpbrasil/erpbrasil.assinatura/requirements/?branch=master
+     :alt: Requirements Status
 
-.. |codecov| image:: https://codecov.io/github/python-edoc/edoc-assinatura/coverage.svg?branch=master
+.. |codecov| image:: https://codecov.io/gh/erpbrasil/erpbrasil.assinatura/branch/master/graphs/badge.svg?branch=master
     :alt: Coverage Status
-    :target: https://codecov.io/github/python-edoc/edoc-assinatura
+    :target: https://codecov.io/github/erpbrasil/erpbrasil.assinatura
 
-.. |version| image:: https://img.shields.io/pypi/v/edoc-assinatura.svg
+.. |version| image:: https://img.shields.io/pypi/v/erpbrasil.assinatura.svg
     :alt: PyPI Package latest release
-    :target: https://pypi.org/project/edoc-assinatura
+    :target: https://erpbrasilassinatura.readthedocs.io/en/latest/
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/python-edoc/edoc-assinatura/v0.0.0.svg
+.. |commits-since| image:: https://img.shields.io/github/commits-since/erpbrasil/erpbrasil.assinatura/v0.0.8..svg
     :alt: Commits since latest release
-    :target: https://github.com/python-edoc/edoc-assinatura/compare/v0.0.0...master
+    :target: https://github.com/erpbrasil/erpbrasil.assinatura/compare/v0.0.8...master
 
-.. |wheel| image:: https://img.shields.io/pypi/wheel/edoc-assinatura.svg
+.. |wheel| image:: https://img.shields.io/pypi/wheel/erpbrasil.assinatura.svg
     :alt: PyPI Wheel
-    :target: https://pypi.org/project/edoc-assinatura
+    :target: https://pypi.org/project/erpbrasil.assinatura
 
-.. |supported-versions| image:: https://img.shields.io/pypi/pyversions/edoc-assinatura.svg
+.. |supported-versions| image:: https://img.shields.io/pypi/pyversions/erpbrasil.assinatura.svg
     :alt: Supported versions
-    :target: https://pypi.org/project/edoc-assinatura
+    :target: https://pypi.org/project/erpbrasil.assinatura
 
-.. |supported-implementations| image:: https://img.shields.io/pypi/implementation/edoc-assinatura.svg
+.. |supported-implementations| image:: https://img.shields.io/pypi/implementation/erpbrasil.assinatura.svg
     :alt: Supported implementations
-    :target: https://pypi.org/project/edoc-assinatura
+    :target: https://pypi.org/project/erpbrasil.assinatura
 
 
 .. end-badges
@@ -68,14 +68,13 @@ Installation
 
 ::
 
-    pip install edoc-assinatura
+    pip install erpbrasil.assinatura
 
 Documentation
 =============
 
 
-https://edoc-assinatura.readthedocs.io/
-
+https://erpbrasilassinatura.readthedocs.io/en/latest/
 
 Development
 ===========

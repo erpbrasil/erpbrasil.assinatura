@@ -3,7 +3,7 @@ edoc_assinatura
 
 .. testsetup::
 
-    from edoc_assinatura import *
+    from erpbrasil.assinatura import *
 
-.. automodule:: edoc_assinatura
+.. automodule:: erpbrasil.assinatura
     :members:

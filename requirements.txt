@@ -1,0 +1,6 @@
+pyopenssl==18.0.0
+signxml
+cryptography
+endesive
+tzlocal
+chardet

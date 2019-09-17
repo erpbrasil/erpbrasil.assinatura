@@ -22,17 +22,17 @@ if os.getenv('SPELLCHECK'):
 
 source_suffix = '.rst'
 master_doc = 'index'
-project = 'edoc-assinatura'
+project = 'erpbrasil.assinatura'
 year = '2019'
 author = 'Luis Felipe Mileo'
 copyright = '{0}, {1}'.format(year, author)
-version = release = '0.0.0'
+version = release = '0.0.8'
 
 pygments_style = 'trac'
 templates_path = ['.']
 extlinks = {
-    'issue': ('https://github.com/python-edoc/edoc-assinatura/issues/%s', '#'),
-    'pr': ('https://github.com/python-edoc/edoc-assinatura/pull/%s', 'PR #'),
+    'issue': ('https://github.com/erpbrasil/erpbrasil.assinatura/issues/%s', '#'),
+    'pr': ('https://github.com/erpbrasil/erpbrasil.assinatura/pull/%s', 'PR #'),
 }
 # on_rtd is whether we are on readthedocs.org
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
