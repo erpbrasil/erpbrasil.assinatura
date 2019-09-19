@@ -21,7 +21,7 @@ class Tests(TestCase):
 
     def test_chave_cert(self):
         chave, certificado = \
-            self.certificado.separa_chave_certificado()
+            self.certificado.cert_chave()
         assert chave, certificado
 
     def test_abertura_arquivo_temporariamente(self):
