@@ -24,6 +24,14 @@ class Tests(TestCase):
             self.certificado.cert_chave()
         assert chave, certificado
 
+    def test_atributos(self):
+        self.certificado.inicio_validade()
+        self.certificado.fim_validade()
+        self.certificado.cert_chave()
+        self.certificado.emissor()
+        self.certificado.proprietario()
+        self.certificado.cnpj_cpf()
+
     def test_abertura_arquivo_temporariamente(self):
         caminho_key = caminho_cert = False
         with ArquivoCertificado(self.certificado, 'w') as (key, cert):
