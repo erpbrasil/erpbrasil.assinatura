@@ -5,17 +5,17 @@ import tempfile
 from datetime import datetime
 
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.serialization.pkcs12 import load_key_and_certificates
+from cryptography.hazmat.primitives.serialization.pkcs12 import \
+    load_key_and_certificates
 from OpenSSL import crypto
 from pytz import UTC
-
 
 from .excecoes import CertificadoExpirado
 
 
 class Certificado(object):
 
-    def __init__(self, arquivo, senha):
+    def __init__(self, arquivo, senha, raise_expirado=True):
         """Permite informar um arquivo PFX binario ou o path do arquivo"""
 
         if isinstance(arquivo, str):
@@ -41,50 +41,45 @@ class Certificado(object):
         self._x509 = crypto.load_certificate(crypto.FILETYPE_PEM,
                                              self._cert)
 
-        self._cn = ''
-        for k, v in self._x509.get_issuer().get_components():
-            k = k.decode('utf-8')
-            v = v.decode('utf-8')
-            if k == 'CN':
-                self._cn = v.encode('utf-8')
-
-
-        if self._x509.has_expired():
-            raise CertificadoExpirado('Certificado Expirado!!!')
-
         self.key, self.cert, self.othercerts = \
             self._load_key_and_certificates()
 
+        if raise_expirado and self._x509.has_expired():
+            raise CertificadoExpirado('Certificado Expirado!!!')
+
+    def _load_key_and_certificates(self):
+        """
+        :return:
+        """
+        return load_key_and_certificates(
+            data=self._arquivo,
+            password=self._senha.encode(),
+            backend=default_backend()
+        )
+
     def inicio_validade(self):
         """Pega a data inicial de validade do certificado"""
-        inicio_validade = datetime.strptime(
-            self._x509.get_notBefore().decode('utf-8'), '%Y%m%d%H%M%SZ')
-        return UTC.localize(inicio_validade)
+        return UTC.localize(self.cert.not_valid_before)
 
     def fim_validade(self):
         """Pega a data final de validade do certificado"""
-        fim_validade = datetime.strptime(
-            self._x509.get_notAfter().decode('utf-8'), '%Y%m%d%H%M%SZ')
-        return UTC.localize(fim_validade)
+        return UTC.localize(self.cert.not_valid_after)
 
     def emissor(self):
         """Pega o nome do emissor do certificado"""
-        return self._cn
+        return self.cert.issuer.rfc4514_string()
 
     def proprietario(self):
         """Pega o nome do proprietário do certificado"""
-        if ':' in self._cn:
-            proprietario = self._cn.rsplit(':', 1)[0]
-        else:
-            proprietario = self._cn
-        return proprietario
+        return self.cert.subject.rfc4514_string()
 
-    def cnpj(self):
-        # As vezes tem o nome e CNPJ do proprietário
-        cnpj = ''
-        if ':' in self._cn:
-            cnpj = self._cn.rsplit(':', 1)[1]
-        return cnpj
+    def cnpj_cpf(self):
+        # As vezes tem o nome e cnpj_cpf do proprietário
+        proprietario = self.proprietario()
+        if ':' in proprietario:
+            cnpj_cpf = proprietario.rsplit(':', 1)[1]
+            return cnpj_cpf
+        return ''
 
     def cert_chave(self):
         """Retorna o certificado e a chave"""
@@ -94,15 +89,11 @@ class Certificado(object):
         """Retorna o arquivo pfx no formato binario pkc12"""
         return self._pkcs12
 
-    def _load_key_and_certificates(self):
-        """
-        :return:
-        """
-        return load_key_and_certificates(
-            data=self.abre_arquivo(),
-            password=self.senha,
-            backend=default_backend()
-        )
+    @property
+    def expirado(self):
+        if self._x509.has_expired():
+            return True
+        return False
 
 
 class ArquivoCertificado(object):
