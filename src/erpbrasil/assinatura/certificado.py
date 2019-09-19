@@ -46,7 +46,8 @@ class Certificado(object):
             k = k.decode('utf-8')
             v = v.decode('utf-8')
             if k == 'CN':
-                self._cn = v.decode('utf-8')
+                self._cn = v.encode('utf-8')
+
 
         if self._x509.has_expired():
             raise CertificadoExpirado('Certificado Expirado!!!')
@@ -93,21 +94,6 @@ class Certificado(object):
         """Retorna o arquivo pfx no formato binario pkc12"""
         return self._pkcs12
 
-    def save_cert_key(self):
-        cert, chave = self.get_cert_chave()
-        cert_temp = tempfile.mkstemp()[1]
-        key_temp = tempfile.mkstemp()[1]
-
-        arq_temp = open(cert_temp, 'w')
-        arq_temp.write(cert)
-        arq_temp.close()
-
-        arq_temp = open(key_temp, 'w')
-        arq_temp.write(chave)
-        arq_temp.close()
-
-        return cert_temp, key_temp
-
     def _load_key_and_certificates(self):
         """
         :return:
@@ -135,13 +121,13 @@ class ArquivoCertificado(object):
         self.key_fd, self.key_path = tempfile.mkstemp()
         self.cert_fd, self.cert_path = tempfile.mkstemp()
 
-        cert, key = certificado.separa_chave_certificado()
+        cert, key = certificado.cert_chave()
 
         tmp = os.fdopen(self.key_fd, 'w')
-        tmp.write(cert.decode())
+        tmp.write(cert)
 
         tmp = os.fdopen(self.cert_fd, 'w')
-        tmp.write(key.decode())
+        tmp.write(key)
 
     def __enter__(self):
         return self.key_path, self.cert_path
