@@ -63,6 +63,13 @@ Assinatura de documentos com certificados digitais A1 e A3
 
 * Free software: MIT license
 
+Windows installation
+====================
+
+Prerequisites
+
+* Install swig (and add swig install folder to PATH environment variable)
+
 Installation
 ============
 
