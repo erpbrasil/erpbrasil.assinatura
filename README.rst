@@ -28,7 +28,7 @@ Overview
     :alt: AppVeyor Build Status
     :target: https://ci.appveyor.com/project/erpbrasil/erpbrasil.assinatura
 
-.. image:: https://requires.io/github/erpbrasil/erpbrasil.assinatura/requirements.svg?branch=master
+.. |requires| image:: https://requires.io/github/erpbrasil/erpbrasil.assinatura/requirements.svg?branch=master
      :target: https://requires.io/github/erpbrasil/erpbrasil.assinatura/requirements/?branch=master
      :alt: Requirements Status
 
@@ -70,11 +70,14 @@ Prerequisites
 
 * Install swig (and add swig install folder to PATH environment variable)
 
-Installation
-============
+
+Ubuntu Installation
+===================
 
 ::
 
+    sudo apt-get update
+    sudo apt-get install swig
     pip install erpbrasil.assinatura
 
 Documentation
@@ -103,6 +106,7 @@ Note, to combine the coverage data from all the tox environments run:
             tox
 
     - - Other
+
       - ::
 
             PYTEST_ADDOPTS=--cov-append tox
