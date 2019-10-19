@@ -16,7 +16,8 @@ class Tests(TestCase):
             'certificado_nfe_senha', 'teste')
         self.certificado = Certificado(
             self.certificado_caminho,
-            self.certificado_senha
+            self.certificado_senha,
+            raise_expirado=False
         )
 
     def test_chave_cert(self):
