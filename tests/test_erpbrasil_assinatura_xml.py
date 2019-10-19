@@ -15,7 +15,7 @@ certificado_ecpf_senha = os.environ.get('certificado_ecpf_senha', 'teste')
 
 
 def test_assinatura_xml_nfe400():
-    certificado = Certificado(certificado_nfe_caminho, certificado_nfe_senha)
+    certificado = Certificado(certificado_nfe_caminho, certificado_nfe_senha, raise_expirado=False)
     assinador = Assinatura(certificado)
 
     nome_arquivo = 'tests/files/nfe-400.xml'
