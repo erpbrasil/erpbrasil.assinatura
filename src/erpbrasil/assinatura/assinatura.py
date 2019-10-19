@@ -99,9 +99,9 @@ class Assinatura(object):
         signature = private_key.sign(
             message,
             padding.PSS(
-                mgf=padding.MGF1(hashes.SHA256()),
+                mgf=padding.MGF1(hashes.SHA1()),
                 salt_length=padding.PSS.MAX_LENGTH
             ),
-            hashes.SHA256()
+            hashes.SHA1()
         )
         return signature
