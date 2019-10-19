@@ -17,8 +17,9 @@ certificado_ecpf_senha = os.environ.get('certificado_ecpf_senha', 'teste')
 def test_assinatura_string():
     certificado = Certificado(certificado_nfe_caminho, certificado_nfe_senha)
     assinador = Assinatura(certificado)
-    texto = 'texte de assinatura'.encode('utf-8')
-    assinador.assina_string(texto)
+    text = 'test of signature'.encode('utf-8')
+    signature = assinador.assina_string(text)
+    assinador.verificar_assinatura_string(text, signature)
 
 
 test_assinatura_string()

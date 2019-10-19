@@ -105,3 +105,15 @@ class Assinatura(object):
             hashes.SHA1()
         )
         return signature
+
+    def verificar_assinatura_string(self, message, signature):
+        public_key = self.certificado.key.public_key()
+        return public_key.verify(
+            signature,
+            message,
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA1()),
+                salt_length=padding.PSS.MAX_LENGTH
+            ),
+            hashes.SHA1()
+        )
