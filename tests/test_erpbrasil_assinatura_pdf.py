@@ -18,7 +18,7 @@ certificado_ecpf_senha = os.environ.get('certificado_ecpf_senha', 'teste')
 
 
 def test_assinatura_nfe_pdf():
-    certificado = Certificado(certificado_nfe_caminho, certificado_nfe_senha)
+    certificado = Certificado(certificado_nfe_caminho, certificado_nfe_senha, raise_expirado=False)
     assinador = Assinatura(certificado)
 
     nome_arquivo = 'tests/files/google.pdf'
@@ -44,7 +44,7 @@ def test_assinatura_nfe_pdf():
 
 
 def test_assinatura_multipla_pdf():
-    ecpf = Certificado(certificado_ecpf_caminho, certificado_ecpf_senha)
+    ecpf = Certificado(certificado_ecpf_caminho, certificado_ecpf_senha, raise_expirado=False)
     assinador_ecpf = Assinatura(ecpf)
 
     nome_arquivo = 'tests/files/google.pdf'
@@ -71,7 +71,7 @@ def test_assinatura_multipla_pdf():
 
     arquivo2 = open(nome_arquivo, 'rb').read()
 
-    nfe = Certificado(certificado_nfe_caminho, certificado_nfe_senha)
+    nfe = Certificado(certificado_nfe_caminho, certificado_nfe_senha, raise_expirado=False)
     assinador_nfe = Assinatura(nfe)
 
     dados_assinatura = {
