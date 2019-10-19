@@ -93,3 +93,15 @@ class Assinatura(object):
                 parent = element_signed.getparent()
                 parent.append(signature)
         return etree.tostring(signed_root, encoding=str)
+
+    def assina_string(self, message):
+        private_key = self.certificado.key
+        signature = private_key.sign(
+            message,
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA256()),
+                salt_length=padding.PSS.MAX_LENGTH
+            ),
+            hashes.SHA256()
+        )
+        return signature
