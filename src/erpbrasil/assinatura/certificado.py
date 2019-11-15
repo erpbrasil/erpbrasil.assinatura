@@ -55,29 +55,40 @@ class Certificado(object):
             backend=default_backend()
         )
 
+    @property
     def inicio_validade(self):
         """Pega a data inicial de validade do certificado"""
         return UTC.localize(self.cert.not_valid_before)
 
+    @property
     def fim_validade(self):
         """Pega a data final de validade do certificado"""
         return UTC.localize(self.cert.not_valid_after)
 
+    @property
     def emissor(self):
         """Pega o nome do emissor do certificado"""
         return self.cert.issuer.rfc4514_string()
 
+    @property
     def proprietario(self):
         """Pega o nome do proprietário do certificado"""
         return self.cert.subject.rfc4514_string()
 
+    @property
     def cnpj_cpf(self):
         # As vezes tem o nome e cnpj_cpf do proprietário
-        proprietario = self.proprietario()
+        proprietario = self.proprietario
         if ':' in proprietario:
             cnpj_cpf = proprietario.rsplit(':', 1)[1]
             return cnpj_cpf
         return ''
+
+    @property
+    def expirado(self):
+        if self._x509.has_expired():
+            return True
+        return False
 
     def cert_chave(self):
         """Retorna o certificado e a chave"""
@@ -86,12 +97,6 @@ class Certificado(object):
     def pkcs12(self):
         """Retorna o arquivo pfx no formato binario pkc12"""
         return self._pkcs12
-
-    @property
-    def expirado(self):
-        if self._x509.has_expired():
-            return True
-        return False
 
 
 class ArquivoCertificado(object):
