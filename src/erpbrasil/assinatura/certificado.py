@@ -68,12 +68,12 @@ class Certificado(object):
     @property
     def emissor(self):
         """Pega o nome do emissor do certificado"""
-        return self.cert.issuer.rfc4514_string()
+        return self._x509.get_issuer().CN
 
     @property
     def proprietario(self):
         """Pega o nome do proprietário do certificado"""
-        return self.cert.subject.rfc4514_string()
+        return self._x509.get_subject().CN
 
     @property
     def cnpj_cpf(self):
