@@ -16,31 +16,37 @@ class Certificado(object):
     def __init__(self, arquivo, senha, raise_expirado=True):
         """Permite informar um arquivo PFX binario ou o path do arquivo"""
 
-        if isinstance(arquivo, str):
-            self._arquivo = open(arquivo, 'rb').read()
+        try:
+            if isinstance(arquivo, str):
+                self._arquivo = open(arquivo, 'rb').read()
 
-        if isinstance(arquivo, bytes):
-            self._arquivo = arquivo
+            if isinstance(arquivo, bytes):
+                self._arquivo = arquivo
 
-        self._senha = senha
+            self._senha = senha
 
-        # Salva o arquivo pfx no formato binario pkc12
-        self._pkcs12 = crypto.load_pkcs12(self._arquivo,
-                                          self._senha)
+            # Salva o arquivo pfx no formato binario pkc12
+            self._pkcs12 = crypto.load_pkcs12(self._arquivo,
+                                              self._senha)
 
-        # Extrai o certicicado
-        self._cert = crypto.dump_certificate(crypto.FILETYPE_PEM,
-                                             self._pkcs12.get_certificate())
+            # Extrai o certicicado
+            self._cert = crypto.dump_certificate(crypto.FILETYPE_PEM,
+                                                 self._pkcs12.get_certificate())
 
-        # Extrai a chave
-        self._chave = crypto.dump_privatekey(crypto.FILETYPE_PEM,
-                                             self._pkcs12.get_privatekey())
+            # Extrai a chave
+            self._chave = crypto.dump_privatekey(crypto.FILETYPE_PEM,
+                                                 self._pkcs12.get_privatekey())
 
-        self._x509 = crypto.load_certificate(crypto.FILETYPE_PEM,
-                                             self._cert)
+            self._x509 = crypto.load_certificate(crypto.FILETYPE_PEM,
+                                                 self._cert)
 
-        self.key, self.cert, self.othercerts = \
-            self._load_key_and_certificates()
+            self.key, self.cert, self.othercerts = \
+                self._load_key_and_certificates()
+
+        except IOError:
+            ErroDeLeituraDeArquivo('Erro ao ler o arquivo!!!')
+        except crypto.Error:
+            CertificadoSenhaInvalida('Certificado ou senha inválida!!!')
 
         if raise_expirado and self._x509.has_expired():
             raise CertificadoExpirado('Certificado Expirado!!!')
