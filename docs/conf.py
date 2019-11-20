@@ -26,7 +26,7 @@ project = 'erpbrasil.assinatura'
 year = '2019'
 author = 'Luis Felipe Mileo'
 copyright = '{0}, {1}'.format(year, author)
-version = 'version = release = '0.3.0''
+version = 'version = release = '0.4.0''
 
 pygments_style = 'trac'
 templates_path = ['.']
