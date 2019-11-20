@@ -11,6 +11,8 @@ from OpenSSL import crypto
 from pytz import UTC
 
 from .excecoes import CertificadoExpirado
+from .excecoes import CertificadoSenhaInvalida
+from .excecoes import ErroDeLeituraDeArquivo
 
 
 class Certificado(object):
@@ -48,9 +50,9 @@ class Certificado(object):
                 self._load_key_and_certificates()
 
         except IOError:
-            ErroDeLeituraDeArquivo('Erro ao ler o arquivo!!!')
+            raise ErroDeLeituraDeArquivo('Erro ao ler o arquivo!!!')
         except crypto.Error:
-            CertificadoSenhaInvalida('Certificado ou senha inválida!!!')
+            raise CertificadoSenhaInvalida('Certificado ou senha inválida!!!')
 
         if raise_expirado and self._x509.has_expired():
             raise CertificadoExpirado('Certificado Expirado!!!')
