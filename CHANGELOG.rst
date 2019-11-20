@@ -6,3 +6,13 @@ Changelog
 ------------------
 
 * First release on PyPI.
+
+0.3.0 (2019-11-19)
+------------------
+
+* Correção da importação da biblioteca e seu namespace
+
+0.4.0 (2019-11-20)
+------------------
+
+* Acesso aos dados do certificado: Proprietário e CNPJ/CPF caso exista
