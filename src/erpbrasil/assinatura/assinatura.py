@@ -32,8 +32,8 @@ class Assinatura(object):
 
         signed_root = signer.sign(
             xml_element,
-            key=self.certificado.key,
-            cert=self.certificado.cert,
+            key=self.certificado._chave,
+            cert=self.certificado._cert,
             reference_uri=ref_uri
         )
 
