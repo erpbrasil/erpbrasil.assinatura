@@ -2,6 +2,8 @@
 
 import os
 import tempfile
+import base64
+import binascii
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.serialization.pkcs12 import load_key_and_certificates
@@ -17,11 +19,13 @@ class Certificado(object):
         """Permite informar um arquivo PFX binario ou o path do arquivo"""
 
         try:
-            if isinstance(arquivo, str):
-                self._arquivo = open(arquivo, 'rb').read()
-
-            if isinstance(arquivo, bytes):
-                self._arquivo = arquivo
+            try:
+                self._arquivo = base64.b64decode(arquivo)
+            except binascii.Error:
+                if isinstance(arquivo, bytes):
+                    self._arquivo = arquivo
+                elif isinstance(arquivo, str):
+                    self._arquivo = open(arquivo, 'rb').read()
 
             self._senha = senha
 
