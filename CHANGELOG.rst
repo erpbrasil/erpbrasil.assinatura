@@ -16,3 +16,10 @@ Changelog
 ------------------
 
 * Acesso aos dados do certificado: Proprietário e CNPJ/CPF caso exista
+
+0.4.1 (2019-11-25)
+------------------
+
+* Compatibilidade com python 2
+* Correção na assinatura
+
