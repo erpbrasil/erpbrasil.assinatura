@@ -40,7 +40,8 @@ class Assinatura(object):
         if reference:
             element_signed = signed_root.find(".//*[@Id='%s']" % reference)
             signature = signed_root.find(
-                ".//{http://www.w3.org/2000/09/xmldsig#}Signature")
+              ".//{http://www.w3.org/2000/09/xmldsig#}Signature/..//*[@URI='#%s']/../.." % reference
+            )
 
             if element_signed is not None and signature is not None:
                 parent = element_signed.getparent()
