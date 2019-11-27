@@ -23,3 +23,8 @@ Changelog
 * Compatibilidade com python 2
 * Correção na assinatura
 
+0.4.2 (2019-11-26)
+------------------
+
+* Concatenar somente o elemento assinado no momento, sem mover os outros elementos de bloco. Por exemplo um lote de rps já assinados deve compor um bloco assinado, ao assinar este bloco as outras assinaturas não devem ser modificadas.
+
