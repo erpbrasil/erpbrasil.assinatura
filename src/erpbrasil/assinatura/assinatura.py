@@ -10,9 +10,8 @@ class Assinatura(object):
 
     def __init__(self, certificado):
         self.certificado = certificado
-
+    
     def assina_xml2(self, xml_element, reference):
-
         for element in xml_element.iter("*"):
             if element.text is not None and not element.text.strip():
                 element.text = None
@@ -92,4 +91,28 @@ if sys.version_info > (3, 0):
 
         return etree.tostring(
             doc, encoding='UTF-8', xml_declaration=True, standalone=False
+        )
+
+    def assina_string(self, message):
+        private_key = self.certificado.key
+        signature = private_key.sign(
+            message,
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA1()),
+                salt_length=padding.PSS.MAX_LENGTH
+            ),
+            hashes.SHA1()
+        )
+        return signature
+
+    def verificar_assinatura_string(self, message, signature):
+        public_key = self.certificado.key.public_key()
+        return public_key.verify(
+            signature,
+            message,
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA1()),
+                salt_length=padding.PSS.MAX_LENGTH
+            ),
+            hashes.SHA1()
         )
