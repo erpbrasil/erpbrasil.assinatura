@@ -2,6 +2,8 @@
 
 import os
 import tempfile
+import base64
+import binascii
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.serialization.pkcs12 import load_key_and_certificates
@@ -9,6 +11,8 @@ from OpenSSL import crypto
 from pytz import UTC
 
 from .excecoes import CertificadoExpirado
+from .excecoes import CertificadoSenhaInvalida
+from .excecoes import ErroDeLeituraDeArquivo
 
 
 class Certificado(object):
@@ -16,31 +20,39 @@ class Certificado(object):
     def __init__(self, arquivo, senha, raise_expirado=True):
         """Permite informar um arquivo PFX binario ou o path do arquivo"""
 
-        if isinstance(arquivo, str):
-            self._arquivo = open(arquivo, 'rb').read()
+        try:
+            try:
+                self._arquivo = base64.b64decode(arquivo)
+            except binascii.Error:
+                if isinstance(arquivo, bytes):
+                    self._arquivo = arquivo
+                elif isinstance(arquivo, str):
+                    self._arquivo = open(arquivo, 'rb').read()
 
-        if isinstance(arquivo, bytes):
-            self._arquivo = arquivo
+            self._senha = senha
 
-        self._senha = senha
+            # Salva o arquivo pfx no formato binario pkc12
+            self._pkcs12 = crypto.load_pkcs12(self._arquivo,
+                                              self._senha)
 
-        # Salva o arquivo pfx no formato binario pkc12
-        self._pkcs12 = crypto.load_pkcs12(self._arquivo,
-                                          self._senha)
+            # Extrai o certicicado
+            self._cert = crypto.dump_certificate(crypto.FILETYPE_PEM,
+                                                 self._pkcs12.get_certificate())
 
-        # Extrai o certicicado
-        self._cert = crypto.dump_certificate(crypto.FILETYPE_PEM,
-                                             self._pkcs12.get_certificate())
+            # Extrai a chave
+            self._chave = crypto.dump_privatekey(crypto.FILETYPE_PEM,
+                                                 self._pkcs12.get_privatekey())
 
-        # Extrai a chave
-        self._chave = crypto.dump_privatekey(crypto.FILETYPE_PEM,
-                                             self._pkcs12.get_privatekey())
+            self._x509 = crypto.load_certificate(crypto.FILETYPE_PEM,
+                                                 self._cert)
 
-        self._x509 = crypto.load_certificate(crypto.FILETYPE_PEM,
-                                             self._cert)
+            self.key, self.cert, self.othercerts = \
+                self._load_key_and_certificates()
 
-        self.key, self.cert, self.othercerts = \
-            self._load_key_and_certificates()
+        except IOError:
+            raise ErroDeLeituraDeArquivo('Erro ao ler o arquivo!!!')
+        except crypto.Error:
+            raise CertificadoSenhaInvalida('Certificado ou senha inválida!!!')
 
         if raise_expirado and self._x509.has_expired():
             raise CertificadoExpirado('Certificado Expirado!!!')
@@ -55,29 +67,40 @@ class Certificado(object):
             backend=default_backend()
         )
 
+    @property
     def inicio_validade(self):
         """Pega a data inicial de validade do certificado"""
         return UTC.localize(self.cert.not_valid_before)
 
+    @property
     def fim_validade(self):
         """Pega a data final de validade do certificado"""
         return UTC.localize(self.cert.not_valid_after)
 
+    @property
     def emissor(self):
         """Pega o nome do emissor do certificado"""
-        return self.cert.issuer.rfc4514_string()
+        return self._x509.get_issuer().CN
 
+    @property
     def proprietario(self):
         """Pega o nome do proprietário do certificado"""
-        return self.cert.subject.rfc4514_string()
+        return self._x509.get_subject().CN
 
+    @property
     def cnpj_cpf(self):
         # As vezes tem o nome e cnpj_cpf do proprietário
-        proprietario = self.proprietario()
+        proprietario = self.proprietario
         if ':' in proprietario:
             cnpj_cpf = proprietario.rsplit(':', 1)[1]
             return cnpj_cpf
         return ''
+
+    @property
+    def expirado(self):
+        if self._x509.has_expired():
+            return True
+        return False
 
     def cert_chave(self):
         """Retorna o certificado e a chave"""
@@ -86,12 +109,6 @@ class Certificado(object):
     def pkcs12(self):
         """Retorna o arquivo pfx no formato binario pkc12"""
         return self._pkcs12
-
-    @property
-    def expirado(self):
-        if self._x509.has_expired():
-            return True
-        return False
 
 
 class ArquivoCertificado(object):
