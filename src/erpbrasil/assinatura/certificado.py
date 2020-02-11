@@ -20,20 +20,24 @@ class Certificado(object):
     def __init__(self, arquivo, senha, raise_expirado=True):
         """Permite informar um arquivo PFX binario ou o path do arquivo"""
 
+        self._senha = senha
+
         try:
             try:
                 self._arquivo = base64.b64decode(arquivo)
-            except binascii.Error:
+
+                # Salva o arquivo pfx no formato binario pkc12
+                self._pkcs12 = crypto.load_pkcs12(self._arquivo,
+                                                  self._senha)
+            except:
                 if isinstance(arquivo, bytes):
                     self._arquivo = arquivo
                 elif isinstance(arquivo, str):
                     self._arquivo = open(arquivo, 'rb').read()
 
-            self._senha = senha
-
-            # Salva o arquivo pfx no formato binario pkc12
-            self._pkcs12 = crypto.load_pkcs12(self._arquivo,
-                                              self._senha)
+                # Salva o arquivo pfx no formato binario pkc12
+                self._pkcs12 = crypto.load_pkcs12(self._arquivo,
+                                                  self._senha)
 
             # Extrai o certicicado
             self._cert = crypto.dump_certificate(crypto.FILETYPE_PEM,
