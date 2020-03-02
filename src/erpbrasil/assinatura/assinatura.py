@@ -29,12 +29,21 @@ class Assinatura(object):
 
         ref_uri = ('#%s' % reference) if reference else None
 
-        signed_root = signer.sign(
-            xml_element,
-            key=self.certificado._chave,
-            cert=self.certificado._cert,
-            reference_uri=ref_uri
-        )
+        signed_root = False
+        try:
+            signed_root = signer.sign(
+                xml_element,
+                key=self.certificado.key,
+                cert=self.certificado.cert,
+                reference_uri=ref_uri
+            )
+        except TypeError:
+            signed_root = signer.sign(
+                xml_element,
+                key=self.certificado.key,
+                cert=self.certificado._cert,
+                reference_uri=ref_uri
+            )
 
         if reference:
             element_signed = signed_root.find(".//*[@Id='%s']" % reference)
