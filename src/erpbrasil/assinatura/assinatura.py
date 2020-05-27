@@ -11,7 +11,7 @@ class Assinatura(object):
     def __init__(self, certificado):
         self.certificado = certificado
 
-    def assina_xml2(self, xml_element, reference):
+    def assina_xml2(self, xml_element, reference, getchildren=False):
         for element in xml_element.iter("*"):
             if element.text is not None and not element.text.strip():
                 element.text = None
@@ -42,10 +42,13 @@ class Assinatura(object):
               ".//{http://www.w3.org/2000/09/xmldsig#}Signature"
             )
 
-            if element_signed is not None and signature is not None:
+            if getchildren and element_signed is not None and signature is not None:
+                child = element_signed.getchildren()
+                child.append(signature)
+            elif element_signed is not None and signature is not None:
                 parent = element_signed.getparent()
                 parent.append(signature)
-        return etree.tostring(signed_root, encoding='utf8', method='xml')
+        return etree.tostring(signed_root, encoding=str)
 
 
 # endesive uses f-strings Syntax from Python 3.6+
