@@ -10,7 +10,7 @@ class Assinatura(object):
 
     def __init__(self, certificado):
         self.certificado = certificado
-    
+
     def assina_xml2(self, xml_element, reference):
         for element in xml_element.iter("*"):
             if element.text is not None and not element.text.strip():
@@ -48,7 +48,8 @@ class Assinatura(object):
         return etree.tostring(signed_root, encoding='utf8', method='xml')
 
 
-if sys.version_info > (3, 0):
+# endesive uses f-strings Syntax from Python 3.6+
+if sys.version_info > (3, 6):
     from endesive import pdf
     from endesive import signer
     from endesive import xades
