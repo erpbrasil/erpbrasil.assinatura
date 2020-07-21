@@ -14,15 +14,6 @@ from os.path import splitext
 from setuptools import find_packages
 from setuptools import setup
 
-try:  # for pip >= 10
-    from pip._internal.req import parse_requirements
-except ImportError:  # for pip <= 9.0.3
-    from pip.req import parse_requirements
-
-install_reqs = parse_requirements('requirements.txt', session=False)
-
-reqs = [str(ir.req) for ir in install_reqs]
-
 
 def read(*names, **kwargs):
     with io.open(
@@ -34,7 +25,7 @@ def read(*names, **kwargs):
 
 setup(
     name='erpbrasil.assinatura',
-    version='0.4.2',
+    version='0.5.0',
     license='MIT license',
     description='Assinatura de documentos com certificados digitais A1 e A3',
     long_description='%s\n%s' % (
@@ -84,7 +75,8 @@ setup(
         # eg: 'keyword1', 'keyword2', 'keyword3',
     ],
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
-    install_requires=reqs,
+    install_requires=[r.strip() for r in
+                      open('requirements.txt').read().splitlines()],
     extras_require={
         # eg:
         #   'rst': ['docutils>=0.11'],

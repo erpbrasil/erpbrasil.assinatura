@@ -51,7 +51,8 @@ class Assinatura(object):
         return etree.tostring(signed_root, encoding=str)
 
 
-if sys.version_info > (3, 0):
+# endesive uses f-strings Syntax from Python 3.6+
+if sys.version_info > (3, 6):
     from endesive import pdf
     from endesive import signer
     from endesive import xades
