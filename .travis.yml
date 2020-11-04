@@ -17,9 +17,6 @@ matrix:
     - python: '3.7'
       env:
         - TOXENV=docs
-    - python: '2.7'
-      env:
-        - TOXENV=py27,report,codecov
     - python: '3.4'
       env:
         - TOXENV=py34,report,codecov
@@ -32,9 +29,6 @@ matrix:
     - python: '3.7'
       env:
         - TOXENV=py37,report,codecov
-    - python: 'pypy2.7-6.0'
-      env:
-        - TOXENV=pypy,report,codecov
     - python: 'pypy3.5-6.0'
       env:
         - TOXENV=pypy3,report,codecov
