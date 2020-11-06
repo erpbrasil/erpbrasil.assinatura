@@ -28,7 +28,7 @@ class Certificado(object):
                 # Salva o arquivo pfx no formato binario pkc12
                 self._pkcs12 = crypto.load_pkcs12(self._arquivo,
                                                   self._senha)
-            except:  # noga
+            except Exception:
                 if isinstance(arquivo, bytes):
                     self._arquivo = arquivo
                 elif isinstance(arquivo, str):
