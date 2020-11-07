@@ -2,13 +2,15 @@
 
 import os
 import unittest
-from erpbrasil.assinatura.assinatura import Assinatura
-from erpbrasil.assinatura.certificado import Certificado
+
 from cryptography.exceptions import InvalidSignature
 
+from erpbrasil.assinatura.assinatura import Assinatura
+from erpbrasil.assinatura.certificado import Certificado
+
 certificado_nfe_caminho = os.environ.get('certificado_nfe_caminho',
-                                         'tests/teste.pfx')
-certificado_nfe_senha = os.environ.get('certificado_nfe_senha', 'teste')
+                                         'tests/fixtures/dummy_cert.pfx')
+certificado_nfe_senha = os.environ.get('certificado_nfe_senha', 'dummy_password')
 
 
 class TestSignatureStringMethods(unittest.TestCase):

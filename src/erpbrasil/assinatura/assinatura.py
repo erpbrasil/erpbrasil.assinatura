@@ -1,8 +1,10 @@
 # coding=utf-8
-import sys
 import signxml
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
+from endesive import pdf
+from endesive import signer
+from endesive import xades
 from lxml import etree
 
 
@@ -58,13 +60,6 @@ class Assinatura(object):
                 parent = element_signed.getparent()
                 parent.append(signature)
         return etree.tostring(signed_root, encoding=str)
-
-
-# endesive uses f-strings Syntax from Python 3.6+
-if sys.version_info > (3, 6):
-    from endesive import pdf
-    from endesive import signer
-    from endesive import xades
 
     def assina_pdf(self, arquivo, dados_assinatura, altoritimo='sha256'):
         return pdf.cms.sign(

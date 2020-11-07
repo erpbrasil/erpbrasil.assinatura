@@ -75,8 +75,7 @@ setup(
         # eg: 'keyword1', 'keyword2', 'keyword3',
     ],
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
-    install_requires=[r.strip() for r in
-                      open('requirements.txt').read().splitlines()],
+    install_requires=[r.strip() for r in open('requirements.txt').read().splitlines()],
     extras_require={
         # eg:
         #   'rst': ['docutils>=0.11'],
