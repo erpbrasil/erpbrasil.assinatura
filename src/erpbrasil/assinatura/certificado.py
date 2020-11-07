@@ -1,8 +1,8 @@
 # coding=utf-8
 
+import base64
 import os
 import tempfile
-import base64
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.serialization.pkcs12 import load_key_and_certificates

@@ -2,10 +2,10 @@
 import signxml
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
-from lxml import etree
 from endesive import pdf
 from endesive import signer
 from endesive import xades
+from lxml import etree
 
 
 class Assinatura(object):

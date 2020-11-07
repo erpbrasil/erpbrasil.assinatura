@@ -2,20 +2,20 @@
 
 import os
 import unittest
-from erpbrasil.assinatura.assinatura import Assinatura
-from erpbrasil.assinatura.certificado import Certificado
+
 from cryptography.exceptions import InvalidSignature
 
+from erpbrasil.assinatura.assinatura import Assinatura
+from erpbrasil.assinatura.certificado import Certificado
 
 certificado_nfe_caminho = os.environ.get('certificado_nfe_caminho',
-                                         'fixtures/dummy_cert.pfx')
+                                         'tests/fixtures/dummy_cert.pfx')
 certificado_nfe_senha = os.environ.get('certificado_nfe_senha', 'dummy_password')
 
 
 class TestSignatureStringMethods(unittest.TestCase):
 
     def test_positive_signature_string(self):
-
         certificado = Certificado(
             certificado_nfe_caminho,
             certificado_nfe_senha,
@@ -28,7 +28,6 @@ class TestSignatureStringMethods(unittest.TestCase):
         self.assertEqual(result, None)
 
     def test_false_positive_signature_string(self):
-
         certificado = Certificado(
             certificado_nfe_caminho,
             certificado_nfe_senha,
