@@ -28,3 +28,9 @@ Changelog
 
 * Concatenar somente o elemento assinado no momento, sem mover os outros elementos de bloco. Por exemplo um lote de rps já assinados deve compor um bloco assinado, ao assinar este bloco as outras assinaturas não devem ser modificadas.
 
+1.0.0 (2020-11-10)
+~~~~~~~~~~~~~~~~~~
+
+* Fim do suporte ao python2
+* Estabilização dos testes
+

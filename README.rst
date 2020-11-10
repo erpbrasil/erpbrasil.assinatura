@@ -59,7 +59,30 @@ Overview
 
 .. end-badges
 
-Assinatura de documentos com certificados digitais A1 e A3
+Manipulação de certificados digitais, A1 e A3,  em Python, facilitando:
+
+* Assinatura de documentos PDF
+* Assinatura de documentos fiscais (XML)
+
+Esta biblioteca faz parte do projeto: https://erpbrasil.github.io/
+
+Documentação
+============
+
+https://erpbrasil.github.io/
+
+Créditos
+========
+
+Esta é uma biblioteca criada atravês do esforço de das empresas:
+
+* Akretion https://akretion.com/pt-BR/
+* KMEE https://www.kmee.com.br
+
+Por favor consulte a lista de contribuidores: https://github.com/erpbrasil/erpbrasil.assinatura/graphs/contributors
+
+Licença
+~~~~~~~
 
 * Free software: MIT license
 
