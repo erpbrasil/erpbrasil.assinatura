@@ -1,7 +1,6 @@
-pyopenssl==18.0.0
-pytz
-signxml
-cryptography
-endesive
-tzlocal
-chardet
+pyopenssl==19.1.0
+pytz==2016.7
+signxml==2.8.1
+cryptography==3.3
+endesive==2.0.1
+chardet==3.0.4

@@ -92,7 +92,7 @@ class Assinatura(object):
         certcontent = signer.cert2asn(cert).dump()
 
         cls = xades.BES()
-        doc = cls.build(
+        doc = cls.enveloping(
             'documento.xml', arquivo, 'application/xml',
             cert, certcontent, signproc, False, True
         )

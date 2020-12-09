@@ -4,8 +4,6 @@ import os
 import tempfile
 from datetime import datetime
 
-from tzlocal import get_localzone
-
 from erpbrasil.assinatura.assinatura import Assinatura
 from erpbrasil.assinatura.certificado import Certificado
 
@@ -33,7 +31,7 @@ def test_assinatura_nfe_pdf():
         'contact': 'KMEE INFORMATICA LTDA',
         'location': 'BR',
         'signingdate': str.encode(
-            datetime.now(get_localzone()).strftime("%Y%M%d%H%M%S%Z")),
+            datetime.utcnow().strftime("%Y%M%d%H%M%S%Z")),
         'reason': 'Teste assinatura',
     }
 
@@ -59,7 +57,7 @@ def test_assinatura_multipla_pdf():
         'contact': 'Luis Felipe Mileo',
         'location': 'BR',
         'signingdate': str.encode(
-            datetime.now(get_localzone()).strftime("%Y%M%d%H%M%S%Z")),
+            datetime.utcnow().strftime("%Y%M%d%H%M%S%Z")),
         'reason': 'Teste Assinatura CPF',
     }
 
@@ -82,7 +80,7 @@ def test_assinatura_multipla_pdf():
         'contact': 'KMEE INFORMATICA LTDA',
         'location': 'BR',
         'signingdate': str.encode(
-            datetime.now(get_localzone()).strftime("%Y%M%d%H%M%S%Z")),
+            datetime.utcnow().strftime("%Y%M%d%H%M%S%Z")),
         'reason': 'Teste Assinatura CNPJ',
     }
 
