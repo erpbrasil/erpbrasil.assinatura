@@ -121,7 +121,7 @@ class Assinatura(object):
 
 
 # endesive uses f-strings Syntax from Python 3.6+
-if sys.version_info > (3, 6):
+if sys.version_info >= (3, 6):
     from endesive import pdf
     from endesive import signer
     from endesive import xades
