@@ -88,13 +88,6 @@ class Assinatura(object):
         )
         return signature
 
-
-# endesive uses f-strings Syntax from Python 3.6+
-if sys.version_info >= (3, 6):
-    from endesive import pdf
-    from endesive import signer
-    from endesive import xades
-
     def assina_pdf(self, arquivo, dados_assinatura, altoritimo='sha256'):
         return pdf.cms.sign(
             datau=arquivo,
@@ -112,34 +105,7 @@ if sys.version_info >= (3, 6):
             trusted_cert_pems=certificados_de_confianca
         )
 
-    def assina_xml(self, arquivo):
-        def signproc(tosign, algosig):
-            key = self.certificado.key
-            signed_value_signature = key.sign(
-                tosign,
-                padding.PKCS1v15(),
-                getattr(hashes, algosig.upper())()
-            )
-            return signed_value_signature
-
-        cert = self.certificado.cert
-        certcontent = signer.cert2asn(cert).dump()
-
-        cls = xades.BES()
-        doc = cls.enveloping(
-            'documento.xml', arquivo, 'application/xml',
-            cert, certcontent, signproc, False, True
-        )
-
-        return etree.tostring(
-            doc, encoding='UTF-8', xml_declaration=True, standalone=False
-        )
-
     def assina_tag(self, message):
-        chave_privada = self.certificado._pkcs12.get_privatekey()
-        assianado = crypto.sign(chave_privada, message, "SHA1")
-        return b64encode(assianado).decode()
-
     def verificar_assinatura_string(self, message, signature):
         public_key = self.certificado.key.public_key()
         return public_key.verify(
