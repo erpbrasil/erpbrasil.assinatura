@@ -8,6 +8,11 @@ from endesive import pdf
 from endesive import signer
 from endesive import xades
 from lxml import etree
+from Crypto.PublicKey import RSA
+from Crypto.Hash import SHA
+from Crypto.Signature import PKCS1_v1_5
+from re import sub, search
+from hashlib import sha1
 
 
 class Assinatura(object):
@@ -17,6 +22,13 @@ class Assinatura(object):
         self.cert = certificado._cert
         self.chave_privada = certificado._chave
         self.senha = certificado._senha
+
+    @classmethod
+    def digest(self, text):
+        hasher = sha1()
+        hasher.update(str(text).encode('utf-8'))
+        digest = hasher.digest()
+        return b64encode(digest).decode('utf-8')
 
     def assina_xml2(self, xml_element, reference, getchildren=False):
         for element in xml_element.iter("*"):
@@ -100,9 +112,14 @@ class Assinatura(object):
         return signature
 
     def assina_tag(self, message):
-        chave_privada = self.certificado._pkcs12.get_privatekey()
-        assianado = crypto.sign(chave_privada, message, "SHA1")
-        return b64encode(assianado).decode()
+        message = b64encode(message).decode('utf-8')
+        privateKeyContent = (self.certificado._chave).decode('utf-8')
+        message = self.digest(message)
+        digestValue = SHA.new(message.encode('utf-8'))
+        rsaKey = RSA.importKey(privateKeyContent)
+        signer = PKCS1_v1_5.new(rsaKey)
+        signature = signer.sign(digestValue)
+        return b64encode(signature).decode('utf-8')
 
     def verificar_assinatura_string(self, message, signature):
         public_key = self.certificado.key.public_key()
