@@ -1,7 +1,5 @@
 # coding=utf-8
 import sys
-import xmlsec
-from xmlsec import constants as consts
 import signxml
 from OpenSSL import crypto
 from base64 import b64encode
