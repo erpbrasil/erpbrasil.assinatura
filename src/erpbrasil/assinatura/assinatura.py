@@ -74,39 +74,10 @@ class Assinatura(object):
         if not self.chave_privada:
             raise Exception("Certificado não existe.")
 
-    def assina_nfse(self, template):
-        self._checar_certificado()
 
-        key = xmlsec.Key.from_memory(
-            self.chave_privada,
-            format=xmlsec.constants.KeyDataFormatPem,
-            password=self.senha,
-        )
 
-        signature_node = xmlsec.template.create(
-            template,
-            c14n_method=consts.TransformInclC14N,
-            sign_method=consts.TransformRsaSha1,
-        )
-        template.append(signature_node)
-        ref = xmlsec.template.add_reference(
-            signature_node, consts.TransformSha1, uri=""
-        )
 
-        xmlsec.template.add_transform(ref, consts.TransformEnveloped)
-        xmlsec.template.add_transform(ref, consts.TransformInclC14N)
 
-        ki = xmlsec.template.ensure_key_info(signature_node)
-        xmlsec.template.add_x509_data(ki)
-
-        ctx = xmlsec.SignatureContext()
-        ctx.key = key
-
-        ctx.key.load_cert_from_memory(self.cert,
-                                      consts.KeyDataFormatPem)
-
-        ctx.sign(signature_node)
-        return etree.tostring(template, encoding=str)
 
     def assina_pdf(self, arquivo, dados_assinatura, altoritimo='sha256'):
         return pdf.cms.sign(
