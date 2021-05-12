@@ -82,6 +82,18 @@ class Assinatura(object):
         if not self.chave_privada:
             raise Exception("Certificado não existe.")
 
+    def assina_string(self, message):
+        private_key = self.certificado.key
+        signature = private_key.sign(
+            message,
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA1()),
+                salt_length=padding.PSS.MAX_LENGTH
+            ),
+            hashes.SHA1()
+        )
+        return signature
+
     def assina_pdf(self, arquivo, dados_assinatura, altoritimo='sha256'):
         return pdf.cms.sign(
             datau=arquivo,
@@ -98,18 +110,6 @@ class Assinatura(object):
             data=arquivo,
             trusted_cert_pems=certificados_de_confianca
         )
-
-    def assina_string(self, message):
-        private_key = self.certificado.key
-        signature = private_key.sign(
-            message,
-            padding.PSS(
-                mgf=padding.MGF1(hashes.SHA1()),
-                salt_length=padding.PSS.MAX_LENGTH
-            ),
-            hashes.SHA1()
-        )
-        return signature
 
     def assina_tag(self, message):
         message = b64encode(message).decode('utf-8')
