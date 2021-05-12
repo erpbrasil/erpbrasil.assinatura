@@ -79,10 +79,32 @@ class Assinatura(object):
                 parent.append(signature)
         return etree.tostring(signed_root, encoding=str)
 
+    def assina_nfse(self, xml_etree):
 
+        signer = signxml.XMLSigner(
+            method=signxml.methods.enveloped,
+            signature_algorithm="rsa-sha1",
+            digest_algorithm='sha1',
+            c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315'
+        )
 
+        ns = dict()
+        ns[None] = signer.namespaces['ds']
+        signer.namespaces = ns
 
+        signed_root = signer.sign(
+            xml_etree,
+            key=self.chave_privada,
+            cert=self.cert,
+        )
 
+        signed_root = etree.tostring(signed_root, encoding=str)
+
+        signed_root = signed_root.replace('\r', '').replace('\n', '')
+
+        return signed_root
+
+    # USADA NAS FUNÇÕES DE TESTE
     def assina_string(self, message):
         private_key = self.certificado.key
         signature = private_key.sign(
@@ -95,6 +117,7 @@ class Assinatura(object):
         )
         return signature
 
+    # USADA NAS FUNÇÕES DE TESTE
     def assina_pdf(self, arquivo, dados_assinatura, altoritimo='sha256'):
         return pdf.cms.sign(
             datau=arquivo,
@@ -105,6 +128,7 @@ class Assinatura(object):
             algomd=altoritimo
         )
 
+    # FUNÇÃO NÃO UTILIZADA
     @staticmethod
     def verifica_pdf(arquivo, certificados_de_confianca):
         return pdf.verify(
@@ -113,15 +137,15 @@ class Assinatura(object):
         )
 
     def assina_tag(self, message):
-        message = b64encode(message).decode('utf-8')
         privateKeyContent = (self.certificado._chave).decode('utf-8')
-        message = self.digest(message)
-        digestValue = SHA.new(message.encode('utf-8'))
+        message = message.encode('utf-8')
+        message = SHA.new(message)
         rsaKey = RSA.importKey(privateKeyContent)
         signer = PKCS1_v1_5.new(rsaKey)
-        signature = signer.sign(digestValue)
-        return b64encode(signature).decode('utf-8')
+        signature = signer.sign(message)
+        return b64encode(signature).decode()
 
+    # USADA NAS FUNÇÕES DE TESTE
     def verificar_assinatura_string(self, message, signature):
         public_key = self.certificado.key.public_key()
         return public_key.verify(
