@@ -79,11 +79,6 @@ class Assinatura(object):
                 parent.append(signature)
         return etree.tostring(signed_root, encoding=str)
 
-    def _checar_certificado(self):
-        if not self.chave_privada:
-            raise Exception("Certificado não existe.")
-
-
 
 
 
