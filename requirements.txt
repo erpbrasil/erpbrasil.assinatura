@@ -1,5 +1,5 @@
 pyopenssl==19.1.0
-pytz==2016.7
+pytz
 signxml==2.8.1
 cryptography==3.3.2
 endesive==2.0.1
