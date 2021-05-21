@@ -104,7 +104,6 @@ class Assinatura(object):
 
         return signed_root
 
-    # USADA NAS FUNÇÕES DE TESTE
     def assina_string(self, message):
         private_key = self.certificado.key
         signature = private_key.sign(
@@ -117,7 +116,6 @@ class Assinatura(object):
         )
         return signature
 
-    # USADA NAS FUNÇÕES DE TESTE
     def assina_pdf(self, arquivo, dados_assinatura, altoritimo='sha256'):
         return pdf.cms.sign(
             datau=arquivo,
@@ -126,14 +124,6 @@ class Assinatura(object):
             cert=self.certificado.cert,
             othercerts=self.certificado.othercerts,
             algomd=altoritimo
-        )
-
-    # FUNÇÃO NÃO UTILIZADA
-    @staticmethod
-    def verifica_pdf(arquivo, certificados_de_confianca):
-        return pdf.verify(
-            data=arquivo,
-            trusted_cert_pems=certificados_de_confianca
         )
 
     def assina_tag(self, message):
@@ -145,7 +135,6 @@ class Assinatura(object):
         signature = signer.sign(message)
         return b64encode(signature).decode()
 
-    # USADA NAS FUNÇÕES DE TESTE
     def verificar_assinatura_string(self, message, signature):
         public_key = self.certificado.key.public_key()
         return public_key.verify(
