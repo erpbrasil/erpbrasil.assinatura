@@ -6,6 +6,7 @@ addons:
   apt:
     packages:
       - swig
+      - libxmlsec1-dev
 env:
   global:
     - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
