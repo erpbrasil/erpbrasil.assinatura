@@ -34,3 +34,7 @@ Changelog
 * Fim do suporte ao python2
 * Estabilização dos testes
 
+1.2.0 (2021-05-26)
+~~~~~~~~~~~~~~~~~~
+
+* Assinatura da nota paulista (Infelizmente com o XMLSEC, tiramos ele em uma nova versão)

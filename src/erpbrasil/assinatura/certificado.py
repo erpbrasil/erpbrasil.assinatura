@@ -144,3 +144,18 @@ class ArquivoCertificado(object):
     def __exit__(self, type, value, traceback):
         os.remove(self.key_path)
         os.remove(self.cert_path)
+
+
+def save_cert_key(cert, key):
+    cert_temp = tempfile.mkstemp()[1]
+    key_temp = tempfile.mkstemp()[1]
+
+    arq_temp = open(cert_temp, "w")
+    arq_temp.write(cert)
+    arq_temp.close()
+
+    arq_temp = open(key_temp, "w")
+    arq_temp.write(key)
+    arq_temp.close()
+
+    return cert_temp, key_temp
