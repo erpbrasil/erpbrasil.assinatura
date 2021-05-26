@@ -1,16 +1,17 @@
 # coding=utf-8
-import sys
-import xmlsec
-from xmlsec import constants as consts
-import signxml
-from OpenSSL import crypto
+
 from base64 import b64encode
+
+import signxml
+import xmlsec
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from endesive import pdf
 from endesive import signer
 from endesive import xades
 from lxml import etree
+from OpenSSL import crypto
+from xmlsec import constants as consts
 
 
 class Assinatura(object):
@@ -107,25 +108,6 @@ class Assinatura(object):
         ctx.sign(signature_node)
         return etree.tostring(template, encoding=str)
 
-    def assina_string(self, message):
-        private_key = self.certificado.key
-        signature = private_key.sign(
-            message,
-            padding.PSS(
-                mgf=padding.MGF1(hashes.SHA1()),
-                salt_length=padding.PSS.MAX_LENGTH
-            ),
-            hashes.SHA1()
-        )
-        return signature
-
-
-# endesive uses f-strings Syntax from Python 3.6+
-if sys.version_info >= (3, 6):
-    from endesive import pdf
-    from endesive import signer
-    from endesive import xades
-
     def assina_pdf(self, arquivo, dados_assinatura, altoritimo='sha256'):
         return pdf.cms.sign(
             datau=arquivo,
@@ -165,6 +147,18 @@ if sys.version_info >= (3, 6):
         return etree.tostring(
             doc, encoding='UTF-8', xml_declaration=True, standalone=False
         )
+
+    def assina_string(self, message):
+        private_key = self.certificado.key
+        signature = private_key.sign(
+            message,
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA1()),
+                salt_length=padding.PSS.MAX_LENGTH
+            ),
+            hashes.SHA1()
+        )
+        return signature
 
     def assina_tag(self, message):
         chave_privada = self.certificado._pkcs12.get_privatekey()
