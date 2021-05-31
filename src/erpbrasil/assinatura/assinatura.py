@@ -1,17 +1,14 @@
 # coding=utf-8
 import signxml
-from OpenSSL import crypto
 from base64 import b64encode
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from endesive import pdf
 from endesive import signer
-from endesive import xades
 from lxml import etree
 from Crypto.PublicKey import RSA
 from Crypto.Hash import SHA
 from Crypto.Signature import PKCS1_v1_5
-from re import sub, search
 from hashlib import sha1
 
 
@@ -86,10 +83,6 @@ class Assinatura(object):
             digest_algorithm='sha1',
             c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315'
         )
-
-        ns = dict()
-        ns[None] = signer.namespaces['ds']
-        signer.namespaces = ns
 
         signed_root = signer.sign(
             xml_etree,
