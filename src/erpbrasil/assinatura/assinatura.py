@@ -108,14 +108,14 @@ class Assinatura(object):
         )
         return signature
 
-    def assina_pdf(self, arquivo, dados_assinatura, altoritimo='sha256'):
+    def assina_pdf(self, arquivo, dados_assinatura, algoritmo='sha256'):
         return pdf.cms.sign(
             datau=arquivo,
             udct=dados_assinatura,
             key=self.certificado.key,
             cert=self.certificado.cert,
             othercerts=self.certificado.othercerts,
-            algomd=altoritimo
+            algomd=algoritmo
         )
 
     def assina_tag(self, message):
