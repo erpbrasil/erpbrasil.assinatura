@@ -4,7 +4,6 @@ from base64 import b64encode
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from endesive import pdf
-from endesive import signer
 from lxml import etree
 from Crypto.PublicKey import RSA
 from Crypto.Hash import SHA
