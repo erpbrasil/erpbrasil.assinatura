@@ -1,4 +1,4 @@
-pytz==2016.7
+pytz>=2016.7
 cryptography==3.3.2
 signxml==2.8.2
 pycrypto==2.6.1
