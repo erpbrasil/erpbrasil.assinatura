@@ -27,6 +27,24 @@ class Assinatura(object):
         digest = hasher.digest()
         return b64encode(digest).decode('utf-8')
 
+    def assina_xml(self, arquivo):
+        signer = signxml.XMLSigner(
+            method=signxml.methods.enveloped,
+            signature_algorithm="rsa-sha1",
+            digest_algorithm='sha1',
+            c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315'
+        )
+
+        root = etree.fromstring(arquivo)
+
+        signed_root = signer.sign(
+            root,
+            key=self.certificado.key,
+            cert=self.certificado._cert,
+        )
+
+        return etree.tostring(signed_root)
+
     def assina_xml2(self, xml_element, reference, getchildren=False):
         for element in xml_element.iter("*"):
             if element.text is not None and not element.text.strip():
