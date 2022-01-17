@@ -19,7 +19,7 @@ class Certificado(object):
     def __init__(self, arquivo, senha, raise_expirado=True):
         """Permite informar um arquivo PFX binario ou o path do arquivo"""
 
-        self._senha = senha
+        self._senha = senha.encode()
 
         try:
             try:
@@ -66,7 +66,7 @@ class Certificado(object):
         """
         return load_key_and_certificates(
             data=self._arquivo,
-            password=self._senha.encode(),
+            password=self._senha,
             backend=default_backend()
         )
 
