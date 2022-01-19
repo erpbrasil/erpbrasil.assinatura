@@ -43,3 +43,9 @@ class Tests(TestCase):
             self.assertTrue(os.path.exists(caminho_cert))
         self.assertFalse(os.path.exists(caminho_key))
         self.assertFalse(os.path.exists(caminho_cert))
+
+    def test_senha(self):
+        senha = self.certificado._encode_senha("123456")
+        self.assertTrue(type(senha) is bytes)
+        senha = self.certificado._encode_senha("123456".encode())
+        self.assertTrue(type(senha) is bytes)
