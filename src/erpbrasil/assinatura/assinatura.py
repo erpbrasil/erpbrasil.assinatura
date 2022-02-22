@@ -1,14 +1,16 @@
-# coding=utf-8
+import logging
 import signxml
 from base64 import b64encode
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
-from endesive import pdf
 from lxml import etree
 from Crypto.PublicKey import RSA
 from Crypto.Hash import SHA
 from Crypto.Signature import PKCS1_v1_5
 from hashlib import sha1
+
+
+_logger = logging.getLogger(__name__)
 
 
 class Assinatura(object):
@@ -126,6 +128,15 @@ class Assinatura(object):
         return signature
 
     def assina_pdf(self, arquivo, dados_assinatura, algoritmo='sha256'):
+        try:
+            from endesive import pdf
+        except ImportError:
+            _logger.info(
+                "assina_pdf requires the https://github.com/m32/endesive"
+                "package but it is not bundled by default"
+                "to avoid depending on pyopenssl which is deprecated"
+            )
+            return False
         return pdf.cms.sign(
             datau=arquivo,
             udct=dados_assinatura,
