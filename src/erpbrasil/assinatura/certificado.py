@@ -19,7 +19,7 @@ class Certificado(object):
     def __init__(self, arquivo, senha, raise_expirado=True):
         """Permite informar um arquivo PFX binario ou o path do arquivo"""
 
-        self._senha = senha
+        self._senha = self._encode_senha(senha)
 
         try:
             try:
@@ -66,7 +66,7 @@ class Certificado(object):
         """
         return load_key_and_certificates(
             data=self._arquivo,
-            password=self._senha.encode(),
+            password=self._senha,
             backend=default_backend()
         )
 
@@ -113,6 +113,11 @@ class Certificado(object):
         """Retorna o arquivo pfx no formato binario pkc12"""
         return self._pkcs12
 
+    def _encode_senha(self, senha):
+        if type(senha) == str:
+            return senha.encode()
+        else:
+            return senha
 
 class ArquivoCertificado(object):
     """ Classe para ser utilizada quando for necessário salvar o arquivo
