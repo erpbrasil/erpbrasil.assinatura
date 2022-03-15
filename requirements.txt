@@ -1,5 +1,4 @@
 pytz>=2016.7
 cryptography==3.3.2
 signxml==2.8.2
-endesive==2.0.1
 chardet==3.0.4

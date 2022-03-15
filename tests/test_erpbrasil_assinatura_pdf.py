@@ -1,5 +1,4 @@
-# coding=utf-8
-
+import logging
 import os
 import tempfile
 from datetime import datetime
@@ -18,6 +17,8 @@ certificado_ecpf_senha = os.environ.get('certificado_ecpf_senha', 'teste')
 
 test_path = os.environ.get('test_path', 'tests/')
 
+_logger = logging.getLogger(__name__)
+
 
 def test_assinatura_nfe_pdf():
     certificado = Certificado(certificado_nfe_caminho, certificado_nfe_senha, raise_expirado=False)
@@ -34,6 +35,16 @@ def test_assinatura_nfe_pdf():
             datetime.utcnow().strftime("%Y%M%d%H%M%S%Z")),
         'reason': 'Teste assinatura',
     }
+
+    try:
+        from endesive import pdf
+    except ImportError:
+        _logger.info(
+            "skipping test because https://github.com/m32/endesive"
+            "package but it is not installed. It is not bundled by default"
+            "to avoid depending on pyopenssl which is deprecated."
+        )
+    return False
 
     assinatura = assinador.assina_pdf(
         arquivo=arquivo,
@@ -60,6 +71,16 @@ def test_assinatura_multipla_pdf():
             datetime.utcnow().strftime("%Y%M%d%H%M%S%Z")),
         'reason': 'Teste Assinatura CPF',
     }
+
+    try:
+        from endesive import pdf
+    except ImportError:
+        _logger.info(
+            "skipping test because https://github.com/m32/endesive"
+            "package but it is not installed. It is not bundled by default"
+            "to avoid depending on pyopenssl which is deprecated."
+        )
+    return False
 
     assinatura1 = assinador_ecpf.assina_pdf(
         arquivo=arquivo,
