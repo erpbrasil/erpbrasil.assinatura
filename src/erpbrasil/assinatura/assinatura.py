@@ -4,9 +4,6 @@ from base64 import b64encode
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from lxml import etree
-from Crypto.PublicKey import RSA
-from Crypto.Hash import SHA
-from Crypto.Signature import PKCS1_v1_5
 from hashlib import sha1
 
 
@@ -145,15 +142,6 @@ class Assinatura(object):
             othercerts=self.certificado.othercerts,
             algomd=algoritmo
         )
-
-    def assina_tag(self, message):
-        privateKeyContent = (self.certificado._chave).decode('utf-8')
-        message = message.encode('utf-8')
-        message = SHA.new(message)
-        rsaKey = RSA.importKey(privateKeyContent)
-        signer = PKCS1_v1_5.new(rsaKey)
-        signature = signer.sign(message)
-        return b64encode(signature).decode()
 
     def verificar_assinatura_string(self, message, signature):
         public_key = self.certificado.key.public_key()
