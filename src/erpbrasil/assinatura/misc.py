@@ -83,4 +83,3 @@ def create_fake_certificate_file(valid, passwd, issuer, country, subject):
     )
 
     return b64encode(p12)
-

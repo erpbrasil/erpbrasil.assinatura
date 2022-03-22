@@ -37,7 +37,7 @@ def test_assinatura_nfe_pdf():
     }
 
     try:
-        from endesive import pdf
+        from endesive import pdf  # noqa: F401
     except ImportError:
         _logger.info(
             "skipping test because https://github.com/m32/endesive"
@@ -73,7 +73,7 @@ def test_assinatura_multipla_pdf():
     }
 
     try:
-        from endesive import pdf
+        from endesive import pdf  # noqa: F401
     except ImportError:
         _logger.info(
             "skipping test because https://github.com/m32/endesive"
