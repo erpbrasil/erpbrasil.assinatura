@@ -119,6 +119,7 @@ class Certificado(object):
         else:
             return senha
 
+
 class ArquivoCertificado(object):
     """ Classe para ser utilizada quando for necessário salvar o arquivo
     temporariamente, garantindo a segurança que o mesmo sera salvo e apagado
