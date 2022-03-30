@@ -14,7 +14,8 @@ from .excecoes import CertificadoSenhaInvalida
 from .excecoes import ErroDeLeituraDeArquivo
 
 
-class Certificado(object):
+class Certificado():
+    """Classe para representar o certificado digital"""
 
     def __init__(self, arquivo, senha, raise_expirado=True):
         """Permite informar um arquivo PFX binario ou o path do arquivo"""
@@ -65,9 +66,7 @@ class Certificado(object):
         :return:
         """
         return load_key_and_certificates(
-            data=self._arquivo,
-            password=self._senha,
-            backend=default_backend()
+            data=self._arquivo, password=self._senha, backend=default_backend()
         )
 
     @property
@@ -92,12 +91,13 @@ class Certificado(object):
 
     @property
     def cnpj_cpf(self):
+        """Pega o CNPJ ou CPF do proprietário do certificado"""
         # As vezes tem o nome e cnpj_cpf do proprietário
         proprietario = self.proprietario
-        if ':' in proprietario:
-            cnpj_cpf = proprietario.rsplit(':', 1)[1]
+        if ":" in proprietario:
+            cnpj_cpf = proprietario.rsplit(":", 1)[1]
             return cnpj_cpf
-        return ''
+        return ""
 
     @property
     def expirado(self):
@@ -120,8 +120,8 @@ class Certificado(object):
             return senha
 
 
-class ArquivoCertificado(object):
-    """ Classe para ser utilizada quando for necessário salvar o arquivo
+class ArquivoCertificado():
+    """Classe para ser utilizada quando for necessário salvar o arquivo
     temporariamente, garantindo a segurança que o mesmo sera salvo e apagado
     rapidamente
 
@@ -138,10 +138,10 @@ class ArquivoCertificado(object):
 
         cert, key = certificado.cert_chave()
 
-        tmp = os.fdopen(self.key_fd, 'w')
+        tmp = os.fdopen(self.key_fd, "w")
         tmp.write(cert)
 
-        tmp = os.fdopen(self.cert_fd, 'w')
+        tmp = os.fdopen(self.cert_fd, "w")
         tmp.write(key)
 
     def __enter__(self):
@@ -153,6 +153,7 @@ class ArquivoCertificado(object):
 
 
 def save_cert_key(cert, key):
+    """Salva o certificado e a chave em arquivos temporários"""
     cert_temp = tempfile.mkstemp()[1]
     key_temp = tempfile.mkstemp()[1]
 
