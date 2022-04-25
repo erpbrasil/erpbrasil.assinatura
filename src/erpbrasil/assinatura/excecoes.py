@@ -10,4 +10,4 @@ class ErroDeLeituraDeArquivo(Exception):
 
 
 class CertificadoSenhaInvalida(Exception):
-    """Lançado quando não é possível abrir um aquivo."""
+    """Lançado quando a senha informada é inválida"""
