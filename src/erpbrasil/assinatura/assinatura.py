@@ -1,11 +1,11 @@
 import logging
-import signxml
 from base64 import b64encode
+from hashlib import sha1
+
+import signxml
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from lxml import etree
-from hashlib import sha1
-
 
 _logger = logging.getLogger(__name__)
 
