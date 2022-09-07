@@ -1,4 +1,4 @@
-__version__ = '1.4.0'
+__version__ = '1.5.0'
 
 from erpbrasil.assinatura.assinatura import Assinatura  # noqa: F401
 from erpbrasil.assinatura.certificado import Certificado  # noqa: F401
