@@ -1,18 +1,13 @@
-# coding=utf-8
-
 import base64
+import datetime
 import os
 import tempfile
-import datetime
-
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.serialization.pkcs12 import (
-    load_key_and_certificates,
-)
-from cryptography.hazmat.primitives import serialization
-from cryptography.x509.oid import NameOID
 
 import pytz
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.serialization.pkcs12 import load_key_and_certificates
+from cryptography.x509.oid import NameOID
 
 from .excecoes import CertificadoExpirado
 from .excecoes import CertificadoSenhaInvalida
@@ -103,7 +98,6 @@ class Certificado():
     def cert_chave(self):
         """Retorna o certificado e a chave"""
         return self._cert.decode(), self._chave.decode()
-
 
     @staticmethod
     def _encode_senha(senha):

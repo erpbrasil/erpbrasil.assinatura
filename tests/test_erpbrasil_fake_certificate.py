@@ -1,8 +1,9 @@
-from unittest import TestCase
 import datetime
-from erpbrasil.assinatura.misc import create_fake_certificate_file
+from unittest import TestCase
+
 from erpbrasil.assinatura import certificado
 from erpbrasil.assinatura.excecoes import CertificadoExpirado
+from erpbrasil.assinatura.misc import create_fake_certificate_file
 
 
 class Tests(TestCase):
