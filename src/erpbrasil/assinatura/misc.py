@@ -70,7 +70,7 @@ def create_fake_certificate_file(valid, passwd, issuer, country, subject):
 
     certificate = builder.sign(
         private_key=private_key,
-        algorithm=hashes.MD5(),
+        algorithm=hashes.SHA3_512(),
     )
 
     p12 = serialize_key_and_certificates(
