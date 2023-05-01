@@ -10,6 +10,19 @@ from lxml import etree
 _logger = logging.getLogger(__name__)
 
 
+class XMLSignerWithSHA1(signxml.XMLSigner):
+    """
+    Extension of the `XMLSigner` class that adds support for the SHA1 hash algorithm
+    to the XML signature process.
+    Note:
+        SHA1-based algorithms are not supported in the default configuration because
+        they are not secure, but in the NF-e project, other more modern algorithms
+        are still not accepted.
+    """
+    def check_deprecated_methods(self):
+        "Override to disable deprecated Check"
+
+
 class Assinatura(object):
 
     def __init__(self, certificado):
@@ -48,7 +61,7 @@ class Assinatura(object):
             if element.text is not None and not element.text.strip():
                 element.text = None
 
-        signer = signxml.XMLSigner(
+        signer = XMLSignerWithSHA1(
             method=signxml.methods.enveloped,
             signature_algorithm="rsa-sha1",
             digest_algorithm='sha1',
@@ -91,7 +104,7 @@ class Assinatura(object):
 
     def assina_nfse(self, xml_etree):
 
-        signer = signxml.XMLSigner(
+        signer = XMLSignerWithSHA1(
             method=signxml.methods.enveloped,
             signature_algorithm="rsa-sha1",
             digest_algorithm='sha1',
