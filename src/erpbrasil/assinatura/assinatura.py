@@ -103,10 +103,7 @@ class Assinatura(object):
             key=self.chave_privada,
             cert=self.cert,
         )
-
         signed_root = etree.tostring(signed_root, encoding=str)
-
-        signed_root = signed_root.replace('\r', '').replace('\n', '')
 
         return signed_root
 
@@ -118,6 +115,26 @@ class Assinatura(object):
                 mgf=padding.MGF1(hashes.SHA1()),
                 salt_length=padding.PSS.MAX_LENGTH
             ),
+            hashes.SHA1()
+        )
+        return signature
+
+    def sign_pkcs1v15_sha1(self, data):
+        """
+        Sign data using PKCS1v15 padding and SHA1 hash algorithm.
+
+        This method is specifically tailored for the NFSe Paulistana RPS signing process.
+
+        Args:
+            data (bytes): Data to be signed.
+
+        Returns:
+            bytes: Generated signature.
+        """
+        private_key = self.certificado.key
+        signature = private_key.sign(
+            data,
+            padding.PKCS1v15(),
             hashes.SHA1()
         )
         return signature
