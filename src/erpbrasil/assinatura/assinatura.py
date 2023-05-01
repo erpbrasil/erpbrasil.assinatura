@@ -117,10 +117,7 @@ class Assinatura(object):
             key=self.chave_privada,
             cert=self.cert,
         )
-
         signed_root = etree.tostring(signed_root, encoding=str)
-
-        signed_root = signed_root.replace('\r', '').replace('\n', '')
 
         return signed_root
 
@@ -132,6 +129,32 @@ class Assinatura(object):
                 mgf=padding.MGF1(hashes.SHA1()),
                 salt_length=padding.PSS.MAX_LENGTH
             ),
+            hashes.SHA1()
+        )
+        return signature
+
+    def sign_rps_nfse_paulistana(self, data):
+        """
+        Generates an additional signature for RPS.
+
+        The private key used to sign the RPS is obtained
+        from the `certificado` attribute of the class.
+
+        The signing process uses the `PKCS1v15` padding and the `SHA1` hash algorithm,
+        which are required by the NFSe Paulistana specification.
+
+        Args:
+        ----
+        data (bytes): The data to be signed.
+
+        Returns:
+        -------
+        signature (bytes): The signature of the data.
+        """
+        private_key = self.certificado.key
+        signature = private_key.sign(
+            data,
+            padding.PKCS1v15(),
             hashes.SHA1()
         )
         return signature
