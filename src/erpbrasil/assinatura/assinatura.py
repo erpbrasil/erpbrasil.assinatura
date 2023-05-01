@@ -68,7 +68,8 @@ class Assinatura(object):
             c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315'
         )
 
-        signer.namespaces = {"ds": "http://www.w3.org/2000/09/xmldsig#"}
+        signer.excise_empty_xmlns_declarations = True
+        signer.namespaces = {None: signxml.namespaces.ds}
 
         ref_uri = ('#%s' % reference) if reference else None
 
