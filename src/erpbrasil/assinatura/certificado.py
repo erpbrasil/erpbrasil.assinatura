@@ -1,9 +1,9 @@
 import base64
-import datetime
 import os
 import tempfile
 
 import pytz
+from datetime import datetime, timezone
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.serialization.pkcs12 import load_key_and_certificates
@@ -60,12 +60,12 @@ class Certificado():
     @property
     def inicio_validade(self):
         """Pega a data inicial de validade do certificado"""
-        return self.cert.not_valid_before.replace(tzinfo=pytz.UTC)
+        return self.cert.not_valid_before_utc
 
     @property
     def fim_validade(self):
         """Pega a data final de validade do certificado"""
-        return self.cert.not_valid_after.replace(tzinfo=pytz.UTC)
+        return self.cert.not_valid_after_utc
 
     @property
     def emissor(self):
@@ -90,8 +90,7 @@ class Certificado():
     @property
     def expirado(self):
         """Verifica se o certificado está expirado"""
-        today = datetime.datetime.today()
-        if today > self.cert.not_valid_after:
+        if datetime.now(timezone.utc) > self.cert.not_valid_after_utc:
             return True
         return False
 
