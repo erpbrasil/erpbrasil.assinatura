@@ -2,11 +2,12 @@ import base64
 import os
 import tempfile
 
-import pytz
 from datetime import datetime, timezone
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives.serialization.pkcs12 import load_key_and_certificates
+from cryptography.hazmat.primitives.serialization.pkcs12 import (
+    load_key_and_certificates,
+)
 from cryptography.x509.oid import NameOID
 
 # This is a small helper for backward compatibility
@@ -17,7 +18,7 @@ from .excecoes import CertificadoSenhaInvalida
 from .excecoes import ErroDeLeituraDeArquivo
 
 
-class Certificado():
+class Certificado:
     """Classe para representar o certificado digital"""
 
     def __init__(self, arquivo, senha, raise_expirado=True):
@@ -64,7 +65,7 @@ class Certificado():
     def inicio_validade(self):
         """Pega a data inicial de validade do certificado"""
         # FIX: Check for modern attribute and fall back to old one
-        if hasattr(self.cert, 'not_valid_before_utc'):
+        if hasattr(self.cert, "not_valid_before_utc"):
             return self.cert.not_valid_before_utc
         else:
             return self.cert.not_valid_before.replace(tzinfo=pytz.UTC)
@@ -73,7 +74,7 @@ class Certificado():
     def fim_validade(self):
         """Pega a data final de validade do certificado"""
         # FIX: Check for modern attribute and fall back to old one
-        if hasattr(self.cert, 'not_valid_after_utc'):
+        if hasattr(self.cert, "not_valid_after_utc"):
             return self.cert.not_valid_after_utc
         else:
             return self.cert.not_valid_after.replace(tzinfo=pytz.UTC)
@@ -102,7 +103,7 @@ class Certificado():
     def expirado(self):
         """Verifica se o certificado está expirado"""
         # FIX: Check for modern attribute and fall back to old one
-        if hasattr(self.cert, 'not_valid_after_utc'):
+        if hasattr(self.cert, "not_valid_after_utc"):
             # New cryptography version: compare aware to aware
             return datetime.now(timezone.utc) > self.cert.not_valid_after_utc
         else:
@@ -120,7 +121,7 @@ class Certificado():
         return senha
 
 
-class ArquivoCertificado():
+class ArquivoCertificado:
     """Classe para ser utilizada quando for necessário salvar o arquivo
     temporariamente, garantindo a segurança que o mesmo sera salvo e apagado
     rapidamente
