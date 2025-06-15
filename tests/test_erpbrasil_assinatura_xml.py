@@ -1,5 +1,3 @@
-# coding=utf-8
-
 import os
 import tempfile
 
@@ -28,6 +26,3 @@ def test_assinatura_xml_nfe400():
     with open(file_temp, 'wb') as fp:
         fp.write(arquivo)
         fp.write(assinatura)
-
-
-test_assinatura_xml_nfe400()

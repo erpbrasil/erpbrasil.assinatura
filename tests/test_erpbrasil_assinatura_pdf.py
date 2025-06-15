@@ -3,6 +3,8 @@ import os
 import tempfile
 from datetime import datetime
 
+import pytest
+
 from erpbrasil.assinatura.assinatura import Assinatura
 from erpbrasil.assinatura.certificado import Certificado
 
@@ -17,10 +19,15 @@ certificado_ecpf_senha = os.environ.get('certificado_ecpf_senha', 'teste')
 
 test_path = os.environ.get('test_path', 'tests/')
 
-_logger = logging.getLogger(__name__)
-
 
 def test_assinatura_nfe_pdf():
+    try:
+        from endesive import pdf  # noqa: F401
+    except ImportError:
+        pytest.skip(
+            "skipping test because endesive is not installed"
+        )
+
     certificado = Certificado(certificado_nfe_caminho, certificado_nfe_senha, raise_expirado=False)
     assinador = Assinatura(certificado)
 
@@ -36,16 +43,6 @@ def test_assinatura_nfe_pdf():
         'reason': 'Teste assinatura',
     }
 
-    try:
-        from endesive import pdf  # noqa: F401
-    except ImportError:
-        _logger.info(
-            "skipping test because https://github.com/m32/endesive"
-            "package but it is not installed. It is not bundled by default"
-            "to avoid depending on pyopenssl which is deprecated."
-        )
-    return False
-
     assinatura = assinador.assina_pdf(
         arquivo=arquivo,
         dados_assinatura=dados_assinatura,
@@ -57,6 +54,13 @@ def test_assinatura_nfe_pdf():
 
 
 def test_assinatura_multipla_pdf():
+    try:
+        from endesive import pdf  # noqa: F401
+    except ImportError:
+        pytest.skip(
+            "skipping test because endesive is not installed"
+        )
+
     ecpf = Certificado(certificado_ecpf_caminho, certificado_ecpf_senha, raise_expirado=False)
     assinador_ecpf = Assinatura(ecpf)
 
@@ -71,16 +75,6 @@ def test_assinatura_multipla_pdf():
             datetime.utcnow().strftime("%Y%M%d%H%M%S%Z")),
         'reason': 'Teste Assinatura CPF',
     }
-
-    try:
-        from endesive import pdf  # noqa: F401
-    except ImportError:
-        _logger.info(
-            "skipping test because https://github.com/m32/endesive"
-            "package but it is not installed. It is not bundled by default"
-            "to avoid depending on pyopenssl which is deprecated."
-        )
-    return False
 
     assinatura1 = assinador_ecpf.assina_pdf(
         arquivo=arquivo,
