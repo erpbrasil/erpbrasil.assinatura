@@ -9,6 +9,9 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.serialization.pkcs12 import load_key_and_certificates
 from cryptography.x509.oid import NameOID
 
+# This is a small helper for backward compatibility
+import pytz
+
 from .excecoes import CertificadoExpirado
 from .excecoes import CertificadoSenhaInvalida
 from .excecoes import ErroDeLeituraDeArquivo
@@ -60,12 +63,20 @@ class Certificado():
     @property
     def inicio_validade(self):
         """Pega a data inicial de validade do certificado"""
-        return self.cert.not_valid_before_utc
+        # FIX: Check for modern attribute and fall back to old one
+        if hasattr(self.cert, 'not_valid_before_utc'):
+            return self.cert.not_valid_before_utc
+        else:
+            return self.cert.not_valid_before.replace(tzinfo=pytz.UTC)
 
     @property
     def fim_validade(self):
         """Pega a data final de validade do certificado"""
-        return self.cert.not_valid_after_utc
+        # FIX: Check for modern attribute and fall back to old one
+        if hasattr(self.cert, 'not_valid_after_utc'):
+            return self.cert.not_valid_after_utc
+        else:
+            return self.cert.not_valid_after.replace(tzinfo=pytz.UTC)
 
     @property
     def emissor(self):
@@ -90,9 +101,13 @@ class Certificado():
     @property
     def expirado(self):
         """Verifica se o certificado está expirado"""
-        if datetime.now(timezone.utc) > self.cert.not_valid_after_utc:
-            return True
-        return False
+        # FIX: Check for modern attribute and fall back to old one
+        if hasattr(self.cert, 'not_valid_after_utc'):
+            # New cryptography version: compare aware to aware
+            return datetime.now(timezone.utc) > self.cert.not_valid_after_utc
+        else:
+            # Old cryptography version: compare naive to naive
+            return datetime.utcnow() > self.cert.not_valid_after
 
     def cert_chave(self):
         """Retorna o certificado e a chave"""
