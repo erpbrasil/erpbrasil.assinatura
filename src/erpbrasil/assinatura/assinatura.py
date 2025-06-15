@@ -39,7 +39,7 @@ class Assinatura(object):
         return b64encode(digest).decode('utf-8')
 
     def assina_xml(self, arquivo):
-        signer = signxml.XMLSigner(
+        signer = XMLSignerWithSHA1(
             method=signxml.methods.enveloped,
             signature_algorithm="rsa-sha1",
             digest_algorithm='sha1',
