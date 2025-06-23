@@ -1,6 +1,7 @@
 """
 Miscellaneous tools for Assinatura.
 """
+
 import datetime
 from base64 import b64encode
 
@@ -8,7 +9,9 @@ from cryptography import x509
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives.serialization import BestAvailableEncryption
-from cryptography.hazmat.primitives.serialization.pkcs12 import serialize_key_and_certificates
+from cryptography.hazmat.primitives.serialization.pkcs12 import (
+    serialize_key_and_certificates,
+)
 from cryptography.x509.oid import NameOID
 
 

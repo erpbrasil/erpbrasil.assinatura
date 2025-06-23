@@ -46,8 +46,7 @@ class Tests(TestCase):
         self.assertEqual(cert.emissor, self.cert_issuer_a)
         self.assertEqual(cert.proprietario, self.cert_subject_valid)
         self.assertEqual(
-            cert.fim_validade.strftime("%Y%M%d"),
-            self.cert_date_exp.strftime("%Y%M%d")
+            cert.fim_validade.strftime("%Y%M%d"), self.cert_date_exp.strftime("%Y%M%d")
         )
 
     def test_invalid_certificate(self):
