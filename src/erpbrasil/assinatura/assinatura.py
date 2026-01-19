@@ -60,6 +60,8 @@ class Assinatura(object):
         for element in xml_element.iter("*"):
             if element.text is not None and not element.text.strip():
                 element.text = None
+            if element.tail is not None and not element.tail.strip():
+                element.tail = None
 
         signer = XMLSignerWithSHA1(
             method=signxml.methods.enveloped,
