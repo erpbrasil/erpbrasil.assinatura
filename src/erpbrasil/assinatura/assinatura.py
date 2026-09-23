@@ -69,7 +69,20 @@ class Assinatura(object):
         """
         return etree.fromstring(etree.tostring(root))
 
-    def assina_xml2(self, xml_element, reference, getchildren=False):
+    def assina_xml2(
+        self,
+        xml_element,
+        reference,
+        getchildren=False,
+        signature_algorithm="rsa-sha1",
+        digest_algorithm="sha1",
+    ):
+        """Assina o elemento referenciado por ``Id``.
+
+        SHA1 continua o padrao porque a SEFAZ ainda exige; webservices mais
+        novos (ex.: NFS-e padrao nacional via NotaControl) rejeitam SHA1 e
+        pedem ``signature_algorithm="rsa-sha256"``/``digest_algorithm="sha256"``.
+        """
         for element in xml_element.iter("*"):
             if element.text is not None and not element.text.strip():
                 element.text = None
@@ -78,8 +91,8 @@ class Assinatura(object):
 
         signer = XMLSignerWithSHA1(
             method=signxml.methods.enveloped,
-            signature_algorithm="rsa-sha1",
-            digest_algorithm="sha1",
+            signature_algorithm=signature_algorithm,
+            digest_algorithm=digest_algorithm,
             c14n_algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315",
         )
 
@@ -100,8 +113,22 @@ class Assinatura(object):
 
         if reference:
             element_signed = signed_root.find(".//*[@Id='%s']" % reference)
-            signature = signed_root.find(
-                ".//{http://www.w3.org/2000/09/xmldsig#}Signature"
+            # o documento pode ja trazer outras assinaturas (ex.: DPS assinada
+            # dentro do lote): a que acabou de ser criada e a que referencia
+            # este Id, nao a primeira que aparecer
+            signature = next(
+                (
+                    sig
+                    for sig in signed_root.iter(
+                        "{http://www.w3.org/2000/09/xmldsig#}Signature"
+                    )
+                    if sig.find(
+                        "{http://www.w3.org/2000/09/xmldsig#}SignedInfo/"
+                        "{http://www.w3.org/2000/09/xmldsig#}Reference"
+                    ).get("URI")
+                    == ref_uri
+                ),
+                None,
             )
 
             if getchildren and element_signed is not None and signature is not None:
