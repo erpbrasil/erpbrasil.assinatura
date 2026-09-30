@@ -56,6 +56,19 @@ class Assinatura(object):
 
         return etree.tostring(signed_root)
 
+    @staticmethod
+    def _normaliza_namespaces(root):
+        """Devolve a arvore com a Signature no namespace ds de fato.
+
+        A partir do signxml 4.2.2, com o namespace padrao ds
+        (``signer.namespaces = {None: ds}``), a Signature nasce na arvore SEM
+        namespace e so ganha o ds na serializacao. Buscas por
+        ``{ds}Signature`` (e a relocacao da assinatura) deixam de achar o
+        elemento. Serializar e reler normaliza; nas versoes anteriores e
+        inofensivo.
+        """
+        return etree.fromstring(etree.tostring(root))
+
     def assina_xml2(self, xml_element, reference, getchildren=False):
         for element in xml_element.iter("*"):
             if element.text is not None and not element.text.strip():
@@ -75,21 +88,15 @@ class Assinatura(object):
 
         ref_uri = ("#%s" % reference) if reference else None
 
-        signed_root = False
-        try:
-            signed_root = signer.sign(
-                xml_element,
-                key=self.certificado.key,
-                cert=self.certificado.cert,
-                reference_uri=ref_uri,
-            )
-        except TypeError:
-            signed_root = signer.sign(
-                xml_element,
-                key=self.certificado.key,
-                cert=self.certificado._cert,
-                reference_uri=ref_uri,
-            )
+        # cert como PEM: todas as versoes do signxml (3.x, 4.x e 5.x) aceitam;
+        # o objeto x509.Certificate solto nunca foi aceito (levantava TypeError)
+        signed_root = signer.sign(
+            xml_element,
+            key=self.certificado.key,
+            cert=self.certificado._cert,
+            reference_uri=ref_uri,
+        )
+        signed_root = self._normaliza_namespaces(signed_root)
 
         if reference:
             element_signed = signed_root.find(".//*[@Id='%s']" % reference)
