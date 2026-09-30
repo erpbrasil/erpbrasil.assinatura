@@ -1,4 +1,5 @@
 pytz>=2016.7
 cryptography>=3.3.2
 signxml>=2.8.2,<4
+pyOpenSSL<24.3
 chardet>=3.0.4
