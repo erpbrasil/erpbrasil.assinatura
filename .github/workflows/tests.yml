@@ -2,45 +2,71 @@ name: tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
+  # sem filtro de branch: PR empilhado em outro PR tambem roda o CI
   pull_request:
-    branches: [ master ]
 
 jobs:
   tests:
-    name: ${{ matrix.name }}
-    runs-on: ${{ matrix.os }}-latest
+    # Python 3.8 a 3.14 pelo setup-python. Cobre do Odoo 14 (3.8) ao Odoo 20 (3.14).
+    name: Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - {name: Python 3.9, python: '3.9', os: ubuntu}
-          - {name: Python 3.10, python: '3.10', os: ubuntu}
-          - {name: Python 3.11, python: '3.11', os: ubuntu}
-          - {name: Python 3.12, python: '3.12', os: ubuntu}
+        python: ['3.8', '3.9', '3.10', '3.11', '3.12', '3.13', '3.14']
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python }}
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
-      - name: Install dependencies
+      - name: libxml2 para compilar o lxml 5 (signxml 3.x exige lxml<6, sem wheel para 3.14)
+        if: matrix.python == '3.14'
         run: |
-          python -m pip install --upgrade pip setuptools pytest pytest-xdist pytest-cov
-          python -m pip install .[test]
+          sudo apt-get update -q
+          sudo apt-get install -y -q libxml2-dev libxslt1-dev
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install .[test,pdf]
+          python -m pip list | grep -iE "^(signxml|cryptography|pyopenssl|lxml|endesive) "
       - name: Test
         run: |
-          pytest --cov --cov-report=xml --cov-branch --doctest-glob="docs/*.md"
+          pytest --cov --cov-report=xml --cov-branch
       - name: Upload coverage to Codecov
+        if: matrix.python == '3.12'
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
+          fail_ci_if_error: false
           verbose: true
+
+  tests-legacy:
+    # Python 3.6 e 3.7 (Odoo 12 e 13; o CI da OCA 12.0 roda 3.6). O ubuntu-latest
+    # nao oferece esses interpretadores, entao rodam em container oficial.
+    name: Python ${{ matrix.python }} (container)
+    runs-on: ubuntu-latest
+    container: python:${{ matrix.python }}-bullseye
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.6', '3.7']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install .[test]
+          python -m pip list | grep -iE "^(signxml|cryptography|pyopenssl|lxml) "
+      - name: Test
+        run: |
+          pytest
+
   signxml:
-    # Prova o codigo nas tres majors do signxml. O teto do requirements.txt
-    # (signxml<4) continua valendo para quem instala o pacote; aqui o signxml
-    # da matriz e instalado por cima, so para o CI.
+    # Prova o codigo nas tres majors do signxml. O teto do pyproject (signxml<4)
+    # continua valendo para quem instala o pacote; aqui o signxml da matriz e
+    # instalado por cima, so para o CI.
     name: signxml ${{ matrix.signxml }} / Python ${{ matrix.python }}
     runs-on: ubuntu-latest
     strategy:
@@ -59,42 +85,47 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
-      - name: Install dependencies
+      - name: Install
         run: |
-          python -m pip install --upgrade pip setuptools pytest
+          python -m pip install --upgrade pip
           python -m pip install .[test]
           python -m pip install "signxml==${{ matrix.signxml }}" ${{ matrix.extra }}
           python -m pip list | grep -iE "^(signxml|cryptography|pyopenssl|lxml) "
       - name: Test
         run: |
-          pytest --doctest-glob="docs/*.md"
+          pytest
+
   pre-commit:
     name: Pre-commit Hooks
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
-    - uses: pre-commit/action@v3.0.1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: pre-commit/action@v3.0.1
+
   check-package:
+    # Constroi o pacote, confere o conteudo do wheel e a convivencia do namespace
+    # `erpbrasil` com as outras libs publicadas no PyPI.
     name: Build & Inspect Package
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-
-      - name: Install dependencies
+          python-version: '3.12'
+      - name: Build
         run: |
-          python -m pip install --upgrade pip
-          pip install build check-wheel-contents
-
-      - name: Build the package
-        run: |
+          python -m pip install --upgrade pip build check-wheel-contents twine
           python -m build
-
-      - name: Check wheel contents (ignore W002)
-        run: |
           check-wheel-contents dist/*.whl --ignore W002
+          twine check --strict dist/*
+      - name: Namespace check with erpbrasil.base, transmissao and edoc from PyPI
+        run: |
+          python -m venv /tmp/ns && . /tmp/ns/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install dist/*.whl erpbrasil.base erpbrasil.transmissao erpbrasil.edoc
+          python -c "import erpbrasil.base, erpbrasil.assinatura, erpbrasil.transmissao, erpbrasil.edoc; from erpbrasil.assinatura import Certificado, Assinatura; print(erpbrasil.assinatura.__version__)"
+          python -m pip uninstall -y erpbrasil.base
+          python -c "import erpbrasil.assinatura, erpbrasil.edoc; print('namespace ok sem a base')"

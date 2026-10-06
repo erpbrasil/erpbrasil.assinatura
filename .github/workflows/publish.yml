@@ -1,13 +1,41 @@
-name: Publish Python 🐍 distributions 📦 to PyPI and TestPyPI
+name: publish
 
+# A Release do GitHub (tag vX.Y.Z) publica no PyPI por Trusted Publishing.
+# A versao do pyproject tem que ser igual a da tag; senao o build para antes de publicar.
 on:
   push:
     tags:
-      - '*'
+      - 'v*'
 
 jobs:
-  build-n-publish:
-    name: Build and publish Python 🐍 distributions 📦 to PyPI
+  build:
+    name: Build and check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check tag against pyproject version
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          version="$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")"
+          echo "tag=$tag pyproject=$version"
+          test "$tag" = "$version"
+      - name: Build
+        run: |
+          python -m pip install --upgrade pip build twine check-wheel-contents
+          python -m build --sdist --wheel --outdir dist/ .
+          check-wheel-contents dist/*.whl --ignore W002
+          twine check --strict dist/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  pypi:
+    name: Publish to PyPI
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: release
@@ -15,24 +43,8 @@ jobs:
     permissions:
       id-token: write
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v5
-      with:
-        python-version: 3.9
-    - name: Install pypa/build
-      run: >-
-        python -m
-        pip install
-        build
-        --user
-    - name: Build a binary wheel and a source tarball
-      run: >-
-        python -m
-        build
-        --sdist
-        --wheel
-        --outdir dist/
-        .
-    - name: Publish distribution 📦 to PyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1

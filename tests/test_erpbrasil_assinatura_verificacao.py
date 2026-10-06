@@ -6,8 +6,8 @@ Alem dela, quando possivel, o proprio ``XMLVerifier`` do signxml confere.
 """
 
 import base64
-import dataclasses
 import hashlib
+import inspect
 import os
 
 import pytest
@@ -24,18 +24,14 @@ from erpbrasil.assinatura.certificado import Certificado
 DS = "http://www.w3.org/2000/09/xmldsig#"
 NS = {"ds": DS}
 
-certificado_nfe_caminho = os.environ.get(
-    "certificado_nfe_caminho", "tests/fixtures/dummy_cert.pfx"
-)
+certificado_nfe_caminho = os.environ.get("certificado_nfe_caminho", "tests/fixtures/dummy_cert.pfx")
 certificado_nfe_senha = os.environ.get("certificado_nfe_senha", "dummy_password")
 arquivo_nfe = os.environ.get("file_nfe_400", "tests/files/nfe-400.xml")
 
 
 @pytest.fixture(scope="module")
 def certificado():
-    return Certificado(
-        certificado_nfe_caminho, certificado_nfe_senha, raise_expirado=False
-    )
+    return Certificado(certificado_nfe_caminho, certificado_nfe_senha, raise_expirado=False)
 
 
 def _verifica_rsa_sha1(xml, certificado, excise_xmlns_vazio=False):
@@ -87,12 +83,16 @@ def _verifica_rsa_sha1(xml, certificado, excise_xmlns_vazio=False):
 
 def _verifica_com_signxml(xml, certificado):
     """Segunda opiniao: XMLVerifier do signxml, com SHA1 liberado na leitura."""
+    if not hasattr(signxml, "SignatureConfiguration"):
+        # signxml 2.x (Python 3.6): sem a API de configuracao; a verificacao
+        # independente em _verifica_rsa_sha1 ja cobriu a assinatura.
+        return
     config = dict(
         require_x509=True,
         signature_methods=frozenset([signxml.SignatureMethod.RSA_SHA1]),
         digest_algorithms=frozenset([signxml.DigestAlgorithm.SHA1]),
     )
-    campos = {f.name for f in dataclasses.fields(signxml.SignatureConfiguration)}
+    campos = set(inspect.signature(signxml.SignatureConfiguration).parameters)
     if "verification_time" in campos:  # signxml >= 5.1: rejeita cert expirado
         config["verification_time"] = (
             certificado.inicio_validade.replace(tzinfo=None)

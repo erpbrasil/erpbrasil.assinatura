@@ -1,0 +1,8 @@
+version: 2
+updates:
+  # So as actions do CI. Dependencias Python sao tratadas na matriz do tests.yml,
+  # porque o teto delas depende do que cada versao do Odoo fixa.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

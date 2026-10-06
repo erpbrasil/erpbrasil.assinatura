@@ -22,9 +22,7 @@ def test_assinatura_nfe_pdf():
     except ImportError:
         pytest.skip("skipping test because endesive is not installed")
 
-    certificado = Certificado(
-        certificado_nfe_caminho, certificado_nfe_senha, raise_expirado=False
-    )
+    certificado = Certificado(certificado_nfe_caminho, certificado_nfe_senha, raise_expirado=False)
     assinador = Assinatura(certificado)
 
     nome_arquivo_pdf = test_path + "files/google.pdf"
@@ -54,9 +52,7 @@ def test_assinatura_multipla_pdf():
     except ImportError:
         pytest.skip("skipping test because endesive is not installed")
 
-    ecpf = Certificado(
-        certificado_ecpf_caminho, certificado_ecpf_senha, raise_expirado=False
-    )
+    ecpf = Certificado(certificado_ecpf_caminho, certificado_ecpf_senha, raise_expirado=False)
     assinador_ecpf = Assinatura(ecpf)
 
     nome_arquivo = test_path + "files/google.pdf"
@@ -81,9 +77,7 @@ def test_assinatura_multipla_pdf():
 
     arquivo2 = open(nome_arquivo, "rb").read()
 
-    nfe = Certificado(
-        certificado_nfe_caminho, certificado_nfe_senha, raise_expirado=False
-    )
+    nfe = Certificado(certificado_nfe_caminho, certificado_nfe_senha, raise_expirado=False)
     assinador_nfe = Assinatura(nfe)
 
     dados_assinatura = {

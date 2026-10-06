@@ -45,9 +45,7 @@ class Tests(TestCase):
         cert = certificado.Certificado(self.certificate_valid, self.cert_passwd)
         self.assertEqual(cert.emissor, self.cert_issuer_a)
         self.assertEqual(cert.proprietario, self.cert_subject_valid)
-        self.assertEqual(
-            cert.fim_validade.strftime("%Y%M%d"), self.cert_date_exp.strftime("%Y%M%d")
-        )
+        self.assertEqual(cert.fim_validade.strftime("%Y%M%d"), self.cert_date_exp.strftime("%Y%M%d"))
 
     def test_invalid_certificate(self):
         """Check a invalid certificate"""

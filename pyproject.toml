@@ -1,0 +1,119 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "erpbrasil.assinatura"
+version = "1.9.0"
+description = "Certificados digitais ICP-Brasil (A1 e A3) e assinatura de XML, PDF e texto em Python"
+readme = "README.rst"
+license = {text = "MIT"}
+authors = [
+  {name = "Luis Felipe Mileo", email = "mileo@kmee.com.br"},
+]
+keywords = ["certificado digital", "ICP-Brasil", "assinatura", "XMLDSig", "NF-e", "PKCS12"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Security :: Cryptography",
+    "Topic :: Utilities",
+]
+# Piso 3.6: e o Python do CI da OCA para o Odoo 12.0. Odoo 20 roda ate 3.14.
+requires-python = ">=3.6"
+dependencies = [
+    "pytz>=2016.7",
+    "cryptography>=3.3.2",
+    # signxml 4.x muda o namespace da Signature (ver assina_xml2) e 5.x exige
+    # cryptography>=45, que o Odoo 16 a 20 nao fixa. O codigo ja suporta 3, 4 e 5
+    # (matriz no CI); o teto sai quando o Odoo subir o pino do cryptography.
+    "signxml>=2.8.2,<4",
+    # pyOpenSSL 24.3 removeu OpenSSL.crypto.verify, usado pelo signxml 3.x.
+    "pyOpenSSL<24.3",
+    "chardet>=3.0.4",
+    "importlib_metadata; python_version<'3.8'",
+]
+
+[project.optional-dependencies]
+# endesive 2.19 usa anotacoes list[...] em tempo de execucao e quebra no import em 3.8
+pdf = ["endesive; python_version>='3.9'"]
+test = [
+    "pytest",
+    "pytest-cov",
+    "coverage[toml]",
+]
+doc = [
+    "sphinx>=1.3",
+    "sphinx-rtd-theme",
+]
+
+[project.scripts]
+erpbrasil-assinatura = "erpbrasil.assinatura.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/erpbrasil/erpbrasil.assinatura"
+Documentation = "https://erpbrasilassinatura.readthedocs.io/en/latest/"
+Changelog = "https://github.com/erpbrasil/erpbrasil.assinatura/blob/master/CHANGELOG.rst"
+"Issue Tracker" = "https://github.com/erpbrasil/erpbrasil.assinatura/issues"
+
+# O namespace `erpbrasil` e compartilhado com erpbrasil.base, erpbrasil.transmissao e
+# erpbrasil.edoc. O wheel leva src/erpbrasil/__init__.py com pkgutil.extend_path, igual
+# ao da erpbrasil.base, o que convive com os pacotes antigos (setuptools nspkg.pth) e com
+# portions PEP 420.
+[tool.hatch.build.targets.wheel]
+packages = ["src/erpbrasil"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src",
+    "tests",
+    "docs",
+    "AUTHORS.rst",
+    "CHANGELOG.rst",
+    "CONTRIBUTING.rst",
+    "LICENSE",
+    "README.rst",
+    "tox.ini",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --tb=short"
+
+[tool.coverage.run]
+branch = true
+source = ["erpbrasil.assinatura"]
+
+[tool.coverage.paths]
+source = ["src", "*/site-packages"]
+
+[tool.coverage.report]
+show_missing = true
+precision = 2
+
+[tool.ruff]
+# O menor alvo que o ruff aceita; a sintaxe fica compativel com 3.6 (sem walrus, sem
+# dataclasses, sem `from __future__ import annotations`), e o CI roda em 3.6 e 3.7.
+target-version = "py37"
+line-length = 120
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["erpbrasil"]
