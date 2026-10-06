@@ -10,8 +10,7 @@ Overview
     * - docs
       - |docs|
     * - tests
-      - | |travis| |appveyor| |requires|
-        | |codecov|
+      - | |tests| |codecov|
     * - package
       - | |version| |wheel| |supported-versions| |supported-implementations|
         | |commits-since|
@@ -20,17 +19,9 @@ Overview
     :target: https://erpbrasilassinatura.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
-.. |travis| image:: https://api.travis-ci.org/erpbrasil/erpbrasil.assinatura.svg?branch=master
-    :alt: Travis-CI Build Status
-    :target: https://travis-ci.org/erpbrasil/erpbrasil.assinatura
-
-.. |appveyor| image:: https://ci.appveyor.com/api/projects/status/github/erpbrasil/erpbrasil.assinatura?branch=master&svg=true
-    :alt: AppVeyor Build Status
-    :target: https://ci.appveyor.com/project/erpbrasil/erpbrasil.assinatura
-
-.. |requires| image:: https://requires.io/github/erpbrasil/erpbrasil.assinatura/requirements.svg?branch=master
-     :target: https://requires.io/github/erpbrasil/erpbrasil.assinatura/requirements/?branch=master
-     :alt: Requirements Status
+.. |tests| image:: https://github.com/erpbrasil/erpbrasil.assinatura/actions/workflows/tests.yml/badge.svg?branch=master
+    :alt: Tests
+    :target: https://github.com/erpbrasil/erpbrasil.assinatura/actions/workflows/tests.yml
 
 .. |codecov| image:: https://codecov.io/gh/erpbrasil/erpbrasil.assinatura/branch/master/graphs/badge.svg?branch=master
     :alt: Coverage Status
@@ -65,6 +56,29 @@ Manipulação de certificados digitais, A1 e A3,  em Python, facilitando:
 * Assinatura de documentos fiscais (XML)
 
 Esta biblioteca faz parte do projeto: https://erpbrasil.github.io/
+
+Instalação
+==========
+
+::
+
+    pip install erpbrasil.assinatura          # certificado A1 (PKCS#12) e assinatura XML
+    pip install erpbrasil.assinatura[pdf]     # mais assinatura de PDF (endesive)
+
+Suporta Python 3.6 a 3.14, o que cobre do Odoo 12 ao Odoo 20. O CI testa cada
+versão de Python e as três linhas do ``signxml`` (3, 4 e 5); o ``signxml`` fica
+limitado a ``<4`` na instalação porque o Odoo 16 a 20 fixa ``cryptography`` em
+versão que o ``signxml`` 5 não aceita.
+
+Uso
+===
+
+::
+
+    from erpbrasil.assinatura import Assinatura, Certificado
+
+    certificado = Certificado("certificado.pfx", "senha")
+    xml_assinado = Assinatura(certificado).assina_xml2(xml_etree, reference="NFe3519...")
 
 Documentação
 ============
