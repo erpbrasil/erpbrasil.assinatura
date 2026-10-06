@@ -49,7 +49,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-pdf = ["endesive"]
+# endesive 2.19 usa anotacoes list[...] em tempo de execucao e quebra no import em 3.8
+pdf = ["endesive; python_version>='3.9'"]
 test = [
     "pytest",
     "pytest-cov",

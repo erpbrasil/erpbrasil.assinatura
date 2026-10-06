@@ -65,3 +65,5 @@ Changelog
   ``pkgutil.extend_path`` (igual à ``erpbrasil.base``), extras ``pdf``, ``test`` e
   ``doc``, Python 3.6 a 3.14 declarado e testado no CI, publicação no PyPI por
   Release do GitHub com conferência da tag. Saem ``setup.py``, Travis e AppVeyor.
+  O extra ``pdf`` (endesive) só instala a partir do Python 3.9: a endesive 2.19
+  quebra no import em 3.8.
