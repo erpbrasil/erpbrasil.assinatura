@@ -4,9 +4,7 @@ import tempfile
 from erpbrasil.assinatura.assinatura import Assinatura
 from erpbrasil.assinatura.certificado import Certificado
 
-certificado_nfe_caminho = os.environ.get(
-    "certificado_nfe_caminho", "tests/fixtures/dummy_cert.pfx"
-)
+certificado_nfe_caminho = os.environ.get("certificado_nfe_caminho", "tests/fixtures/dummy_cert.pfx")
 certificado_nfe_senha = os.environ.get("certificado_nfe_senha", "dummy_password")
 
 certificado_ecpf_caminho = os.environ.get("certificado_ecpf_caminho", "tests/teste.pfx")
@@ -14,9 +12,7 @@ certificado_ecpf_senha = os.environ.get("certificado_ecpf_senha", "teste")
 
 
 def test_assinatura_xml_nfe400():
-    certificado = Certificado(
-        certificado_nfe_caminho, certificado_nfe_senha, raise_expirado=False
-    )
+    certificado = Certificado(certificado_nfe_caminho, certificado_nfe_senha, raise_expirado=False)
     assinador = Assinatura(certificado)
 
     nome_arquivo = os.environ.get("file_nfe_400", "tests/files/nfe-400.xml")
@@ -69,19 +65,13 @@ def test_assinatura_xml2_sha256_dps_e_lote():
     """DPS e LoteDps assinados em SHA256, como exige a NFS-e via NotaControl."""
     from lxml import etree
 
-    certificado = Certificado(
-        certificado_nfe_caminho, certificado_nfe_senha, raise_expirado=False
-    )
+    certificado = Certificado(certificado_nfe_caminho, certificado_nfe_senha, raise_expirado=False)
     assinador = Assinatura(certificado)
     sha256 = dict(signature_algorithm="rsa-sha256", digest_algorithm="sha256")
 
     root = etree.fromstring(LOTE_DPS)
     dps = root.find(".//{%s}DPS" % NS_NFSE)
-    signed_dps = etree.fromstring(
-        assinador.assina_xml2(
-            dps, "DPS520870721234567800019500001000000000000001", **sha256
-        )
-    )
+    signed_dps = etree.fromstring(assinador.assina_xml2(dps, "DPS520870721234567800019500001000000000000001", **sha256))
     dps.getparent().replace(dps, signed_dps)
 
     signed = etree.fromstring(assinador.assina_xml2(root, "Lote1", **sha256))
@@ -103,9 +93,7 @@ def test_assinatura_xml2_sha256_dps_e_lote():
 def test_assinatura_xml2_padrao_continua_sha1():
     from lxml import etree
 
-    certificado = Certificado(
-        certificado_nfe_caminho, certificado_nfe_senha, raise_expirado=False
-    )
+    certificado = Certificado(certificado_nfe_caminho, certificado_nfe_senha, raise_expirado=False)
     root = etree.fromstring(LOTE_DPS)
     signed = etree.fromstring(Assinatura(certificado).assina_xml2(root, "Lote1"))
     method = signed.find(".//{%s}SignatureMethod" % NS_DS).get("Algorithm")

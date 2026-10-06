@@ -3,21 +3,14 @@
 import os
 from unittest import TestCase
 
-from erpbrasil.assinatura.certificado import ArquivoCertificado
-from erpbrasil.assinatura.certificado import Certificado
+from erpbrasil.assinatura.certificado import ArquivoCertificado, Certificado
 
 
 class Tests(TestCase):
     def setUp(self):
-        self.certificado_caminho = os.environ.get(
-            "certificado_nfe_caminho", "tests/fixtures/dummy_cert.pfx"
-        )
-        self.certificado_senha = os.environ.get(
-            "certificado_nfe_senha", "dummy_password"
-        )
-        self.certificado = Certificado(
-            self.certificado_caminho, self.certificado_senha, raise_expirado=False
-        )
+        self.certificado_caminho = os.environ.get("certificado_nfe_caminho", "tests/fixtures/dummy_cert.pfx")
+        self.certificado_senha = os.environ.get("certificado_nfe_senha", "dummy_password")
+        self.certificado = Certificado(self.certificado_caminho, self.certificado_senha, raise_expirado=False)
 
     def test_chave_cert(self):
         chave, certificado = self.certificado.cert_chave()

@@ -119,12 +119,9 @@ class Assinatura(object):
             signature = next(
                 (
                     sig
-                    for sig in signed_root.iter(
-                        "{http://www.w3.org/2000/09/xmldsig#}Signature"
-                    )
+                    for sig in signed_root.iter("{http://www.w3.org/2000/09/xmldsig#}Signature")
                     if sig.find(
-                        "{http://www.w3.org/2000/09/xmldsig#}SignedInfo/"
-                        "{http://www.w3.org/2000/09/xmldsig#}Reference"
+                        "{http://www.w3.org/2000/09/xmldsig#}SignedInfo/{http://www.w3.org/2000/09/xmldsig#}Reference"
                     ).get("URI")
                     == ref_uri
                 ),
@@ -160,9 +157,7 @@ class Assinatura(object):
         private_key = self.certificado.key
         signature = private_key.sign(
             message,
-            padding.PSS(
-                mgf=padding.MGF1(hashes.SHA1()), salt_length=padding.PSS.MAX_LENGTH
-            ),
+            padding.PSS(mgf=padding.MGF1(hashes.SHA1()), salt_length=padding.PSS.MAX_LENGTH),
             hashes.SHA1(),
         )
         return signature
@@ -207,8 +202,6 @@ class Assinatura(object):
         return public_key.verify(
             signature,
             message,
-            padding.PSS(
-                mgf=padding.MGF1(hashes.SHA1()), salt_length=padding.PSS.MAX_LENGTH
-            ),
+            padding.PSS(mgf=padding.MGF1(hashes.SHA1()), salt_length=padding.PSS.MAX_LENGTH),
             hashes.SHA1(),
         )

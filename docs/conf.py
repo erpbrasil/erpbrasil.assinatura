@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 import os
 
-
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",

@@ -1,8 +1,10 @@
 import base64
 import os
 import tempfile
-
 from datetime import datetime, timezone
+
+# This is a small helper for backward compatibility
+import pytz
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.serialization.pkcs12 import (
@@ -10,12 +12,7 @@ from cryptography.hazmat.primitives.serialization.pkcs12 import (
 )
 from cryptography.x509.oid import NameOID
 
-# This is a small helper for backward compatibility
-import pytz
-
-from .excecoes import CertificadoExpirado
-from .excecoes import CertificadoSenhaInvalida
-from .excecoes import ErroDeLeituraDeArquivo
+from .excecoes import CertificadoExpirado, CertificadoSenhaInvalida, ErroDeLeituraDeArquivo
 
 
 class Certificado:
@@ -39,9 +36,7 @@ class Certificado:
         try:
             self.key, self.cert, self.othercerts = self._load_key_and_certificates()
         except ValueError as value_error:
-            raise CertificadoSenhaInvalida(
-                "Certificado ou senha inválida!!!"
-            ) from value_error
+            raise CertificadoSenhaInvalida("Certificado ou senha inválida!!!") from value_error
 
         if raise_expirado and self.expirado:
             raise CertificadoExpirado("Certificado Expirado!!!")
@@ -57,9 +52,7 @@ class Certificado:
         """
         :return:
         """
-        return load_key_and_certificates(
-            data=self._arquivo, password=self._senha, backend=default_backend()
-        )
+        return load_key_and_certificates(data=self._arquivo, password=self._senha, backend=default_backend())
 
     @property
     def inicio_validade(self):
