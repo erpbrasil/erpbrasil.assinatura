@@ -56,7 +56,33 @@ class Assinatura(object):
 
         return etree.tostring(signed_root)
 
-    def assina_xml2(self, xml_element, reference, getchildren=False):
+    @staticmethod
+    def _normaliza_namespaces(root):
+        """Devolve a arvore com a Signature no namespace ds de fato.
+
+        A partir do signxml 4.2.2, com o namespace padrao ds
+        (``signer.namespaces = {None: ds}``), a Signature nasce na arvore SEM
+        namespace e so ganha o ds na serializacao. Buscas por
+        ``{ds}Signature`` (e a relocacao da assinatura) deixam de achar o
+        elemento. Serializar e reler normaliza; nas versoes anteriores e
+        inofensivo.
+        """
+        return etree.fromstring(etree.tostring(root))
+
+    def assina_xml2(
+        self,
+        xml_element,
+        reference,
+        getchildren=False,
+        signature_algorithm="rsa-sha1",
+        digest_algorithm="sha1",
+    ):
+        """Assina o elemento referenciado por ``Id``.
+
+        SHA1 continua o padrao porque a SEFAZ ainda exige; webservices mais
+        novos (ex.: NFS-e padrao nacional via NotaControl) rejeitam SHA1 e
+        pedem ``signature_algorithm="rsa-sha256"``/``digest_algorithm="sha256"``.
+        """
         for element in xml_element.iter("*"):
             if element.text is not None and not element.text.strip():
                 element.text = None
@@ -65,8 +91,8 @@ class Assinatura(object):
 
         signer = XMLSignerWithSHA1(
             method=signxml.methods.enveloped,
-            signature_algorithm="rsa-sha1",
-            digest_algorithm="sha1",
+            signature_algorithm=signature_algorithm,
+            digest_algorithm=digest_algorithm,
             c14n_algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315",
         )
 
@@ -75,26 +101,34 @@ class Assinatura(object):
 
         ref_uri = ("#%s" % reference) if reference else None
 
-        signed_root = False
-        try:
-            signed_root = signer.sign(
-                xml_element,
-                key=self.certificado.key,
-                cert=self.certificado.cert,
-                reference_uri=ref_uri,
-            )
-        except TypeError:
-            signed_root = signer.sign(
-                xml_element,
-                key=self.certificado.key,
-                cert=self.certificado._cert,
-                reference_uri=ref_uri,
-            )
+        # cert como PEM: todas as versoes do signxml (3.x, 4.x e 5.x) aceitam;
+        # o objeto x509.Certificate solto nunca foi aceito (levantava TypeError)
+        signed_root = signer.sign(
+            xml_element,
+            key=self.certificado.key,
+            cert=self.certificado._cert,
+            reference_uri=ref_uri,
+        )
+        signed_root = self._normaliza_namespaces(signed_root)
 
         if reference:
             element_signed = signed_root.find(".//*[@Id='%s']" % reference)
-            signature = signed_root.find(
-                ".//{http://www.w3.org/2000/09/xmldsig#}Signature"
+            # o documento pode ja trazer outras assinaturas (ex.: DPS assinada
+            # dentro do lote): a que acabou de ser criada e a que referencia
+            # este Id, nao a primeira que aparecer
+            signature = next(
+                (
+                    sig
+                    for sig in signed_root.iter(
+                        "{http://www.w3.org/2000/09/xmldsig#}Signature"
+                    )
+                    if sig.find(
+                        "{http://www.w3.org/2000/09/xmldsig#}SignedInfo/"
+                        "{http://www.w3.org/2000/09/xmldsig#}Reference"
+                    ).get("URI")
+                    == ref_uri
+                ),
+                None,
             )
 
             if getchildren and element_signed is not None and signature is not None:
